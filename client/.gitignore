@@ -1,6 +1,5 @@
 # node_modules
-/client/node_modules/
-(admin và server có thể cài npm module riêng, sẽ không bỏ vào git)
+node_modules/
 
 # Build output
 /client/build/
