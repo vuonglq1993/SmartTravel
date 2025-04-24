@@ -9,6 +9,7 @@ SmartTravel là nền tảng du lịch thông minh, cung cấp các công cụ �
 ### Các công nghệ sử dụng:
 
 -Frontend: Sử dụng React để làm việc, kết hợp với thư viện Bootstrap để trang trí
+---
 -Backend: Sử dụng Java (Springboot), kết hợp mySQL
 
 
