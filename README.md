@@ -13,20 +13,31 @@
 
 cd client
 
+### Cài thư viện
 
-npm install   # Cài thư viện
-npm install react-router-dom react-datepicker react-bootstrap react-lightbox-gallery react-paginate react-slick slick-carousel react-image-gallery bootstrap --legacy-peer-deps #Cài đặt các thư viện cần thiết
+npm install  
 
-npm start  # Chạy frontend tại http://localhost:3000
+### Cài đặt các thư viện cần thiết
+
+npm install react-router-dom react-datepicker react-bootstrap react-lightbox-gallery react-paginate react-slick slick-carousel react-image-gallery bootstrap --legacy-peer-deps 
+
+### Chạy frontend tại http://localhost:3000
+
+npm start
 
 ---
 
 
 ## 🧰 Chạy backend (Spring Boot - Chạy bằng Intelij Idea)
 
-cd server
-./mvnw spring-boot:run   # Dành cho Linux/macOS
+### Trỏ vào thư mục Folder
 
-hoặc nếu dùng Windows:
+cd server
+
+### Dành cho Linux/macOS
+
+./mvnw spring-boot:run  
+
+### Windows:
 
 mvnw.cmd spring-boot:run
