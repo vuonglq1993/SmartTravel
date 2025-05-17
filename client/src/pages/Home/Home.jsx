@@ -112,7 +112,7 @@ const Home = () => {
           <Row>
             {popularsData.map((val, inx) => {
               return (
-                <Col md={3} sm={6} xs={12} className="mb-5" key={inx}>
+                <Col md={3} sm={6} xs={12} className="mb-5" key={inx}  style={{ maxHeight: "900px", overflowY: "auto" }}>
                   <PopularCard val={val} />
                 </Col>
               );
