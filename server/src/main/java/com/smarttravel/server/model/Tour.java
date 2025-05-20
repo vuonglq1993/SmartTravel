@@ -9,7 +9,7 @@ import java.util.List;
 public class Tour {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "destination_id")
@@ -36,11 +36,11 @@ public class Tour {
     @OneToMany(mappedBy = "tour")
     private List<Image> images;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

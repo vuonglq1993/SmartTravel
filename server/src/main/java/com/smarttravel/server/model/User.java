@@ -11,7 +11,7 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     private String name;
 
@@ -31,11 +31,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Review> reviews;
 
-    public Long getId() {
+    boolean result;
+    User data;
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -96,4 +99,22 @@ public class User {
     }
 
 // getters, setters
+
+    public boolean isResult() {
+        return result;
+    }
+
+    public void setResult(boolean result) {
+        this.result = result;
+    }
+
+    public User getData() {
+        return data;
+    }
+
+    public void setData(User data) {
+        this.data = data;
+    }
+
 }
+
