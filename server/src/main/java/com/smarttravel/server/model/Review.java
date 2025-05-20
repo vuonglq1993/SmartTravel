@@ -66,9 +66,11 @@ public class Review {
         this.comment = comment;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
+
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
