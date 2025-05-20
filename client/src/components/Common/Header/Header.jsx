@@ -63,12 +63,9 @@ const Header = () => {
               <NavLink className="nav-link m-3" to="/top-places" onClick={closeMenu}>TOP PLACES</NavLink>
               <NavLink className="nav-link m-3" to="/gallery" onClick={closeMenu}>GALLERY</NavLink>
               <NavLink className="nav-link m-3" to="/contact-us" onClick={closeMenu}>CONTACT</NavLink>
-              <div className="ms-md-4 ms-2 book-now-btn">
-                <NavLink className="primaryBtn mt-3 d-none d-sm-inline-block" onClick={toggleModal}>
+                <NavLink className="primaryBtn mt-3 mb-2 d-none d-sm-inline-block" onClick={toggleModal}>
                   Book Now
-                </NavLink>
-              </div>
-              
+                </NavLink>              
             </Nav>
           </Offcanvas.Body>
         </Navbar.Offcanvas>
