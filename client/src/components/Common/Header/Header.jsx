@@ -3,6 +3,7 @@ import {
   Navbar,
   Offcanvas,
   Nav,
+  Form,
 } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import BookingModal from "../../Booking Modal/BookingModal";
@@ -67,7 +68,7 @@ const Header = () => {
                   Book Now
                 </NavLink>
               </div>
-
+              
             </Nav>
           </Offcanvas.Body>
         </Navbar.Offcanvas>
