@@ -6,7 +6,7 @@ import {
   Form,
 } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import BookingModal from "../../Booking Modal/BookingModal";
+import LoginModal from "../../Login/Login";
 import logo from "../../../assets/images/logo/Logo.png";
 import "../Header/header.css";
 
@@ -63,24 +63,22 @@ const Header = () => {
               <NavLink className="nav-link m-3" to="/top-places" onClick={closeMenu}>TOP PLACES</NavLink>
               <NavLink className="nav-link m-3" to="/gallery" onClick={closeMenu}>GALLERY</NavLink>
               <NavLink className="nav-link m-3" to="/contact-us" onClick={closeMenu}>CONTACT</NavLink>
-                <NavLink className="primaryBtn mt-3 mb-2 d-none d-sm-inline-block" onClick={toggleModal}>
-                  Book Now
-                </NavLink>              
             </Nav>
+            <NavLink className="d-none d-sm-inline-block text-decoration-none" onClick={toggleModal}>
+              <p class="text-white m-3 pt-1 me-4"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+              </svg></p>
+            </NavLink>
           </Offcanvas.Body>
+
         </Navbar.Offcanvas>
-        {/* End Navbar Links */}
-
-        {/* Book Now Button */}
-
-        {/* Mobile Menu Toggle */}
         <li className="d-inline-block d-lg-none m-3 text-white toggle_btn">
           <i className={open ? "bi bi-x-lg" : "bi bi-list"} onClick={toggleMenu}></i>
         </li>
       </Navbar>
 
-      {/* Modal Đặt Tour */}
-      <BookingModal isOpen={isModalOpen} toggle={toggleModal} />
+      <LoginModal isOpen={isModalOpen} toggle={toggleModal} />
     </header>
   );
 };

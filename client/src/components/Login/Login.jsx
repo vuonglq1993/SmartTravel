@@ -1,17 +1,18 @@
 
 import React, { useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import "./BookingModal.css";
+import "./Login.css";
 import logo from "../../assets/images/logo/logo co màu.png";
+import axios from "axios";
 
-const BookingModal = ({ isOpen, toggle }) => {
+
+const LoginModal = ({ isOpen, toggle }) => {
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [isLoginMode, setIsLoginMode] = useState(true);
 
     const [formData, setFormData] = useState({
         name: "",
         email: "",
-        password: "",
+        password: "",   
         confirmPassword: "",
     });
 
@@ -22,30 +23,52 @@ const BookingModal = ({ isOpen, toggle }) => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         if (!isLoginMode && formData.password !== formData.confirmPassword) {
             alert("Mật khẩu không khớp!");
             return;
         }
-
+    
         if (formData.password.length < 6) {
             alert("Mật khẩu phải có ít nhất 6 ký tự!");
             return;
         }
-
-        // TODO: Gọi API đăng nhập hoặc đăng ký
-
-        setShowSuccessPopup(true);
-
-        setTimeout(() => {
-            setShowSuccessPopup(false);
-            toggle();
-            window.location.href = "/";
-        }, 3000);
+    
+        try {
+            if (isLoginMode) {
+                // Gọi API đăng nhập
+                const response = await axios.post("http://localhost:8080/api/auth/login", {
+                    email: formData.email,
+                    password: formData.password,
+                });
+    
+                console.log("Đăng nhập thành công:", response.data);
+            } else {
+                // Gọi API đăng ký
+                const response = await axios.post("http://localhost:8080/api/auth/create", {
+                    name: formData.name,
+                    email: formData.email,
+                    password: formData.password,
+                });
+    
+                console.log("Đăng ký thành công:", response.data);
+            }
+    
+            setShowSuccessPopup(true);
+    
+            setTimeout(() => {
+                setShowSuccessPopup(false);
+                toggle();
+                window.location.href = "/";
+            }, 3000);
+        } catch (error) {
+            console.error("Lỗi API:", error.response?.data || error.message);
+            alert(error.response?.data?.message || "Đã có lỗi xảy ra!");
+        }
     };
-
+    
     return (
         <div className="modal-overlay">
             <div className="modal-content">
@@ -146,4 +169,4 @@ const BookingModal = ({ isOpen, toggle }) => {
     );
 };
 
-export default BookingModal;
+export default LoginModal;
