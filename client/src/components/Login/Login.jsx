@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import "./BookingModal.css";
+import "./Login.css";
 import logo from "../../assets/images/logo/logo co màu.png";
 
-const BookingModal = ({ isOpen, toggle }) => {
+const LoginModal = ({ isOpen, toggle }) => {
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [isLoginMode, setIsLoginMode] = useState(true);
 
@@ -145,4 +144,4 @@ const BookingModal = ({ isOpen, toggle }) => {
     );
 };
 
-export default BookingModal;
+export default LoginModal;
