@@ -44,10 +44,11 @@
   background-color: #31d3ff;
   color: white; 
   border: 1px solid #00b4d8;
-  padding: 10px 20px;
+  padding: 10px 20px 10px 20px;
   font-weight: bold;
   text-transform: uppercase;
   border-radius: 50px; 
+  max-width: 150px;
 }
 
 .primaryBtn:hover {
