@@ -1,18 +1,17 @@
-
 import React, { useState } from "react";
 import "./Login.css";
 import logo from "../../assets/images/logo/logo co màu.png";
 import axios from "axios";
 
-
 const LoginModal = ({ isOpen, toggle }) => {
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [isLoginMode, setIsLoginMode] = useState(true);
+    const [emailCheckResult, setEmailCheckResult] = useState("");
 
     const [formData, setFormData] = useState({
-        name: "",
+        username: "",
         email: "",
-        password: "",   
+        password: "",
         confirmPassword: "",
     });
 
@@ -21,54 +20,72 @@ const LoginModal = ({ isOpen, toggle }) => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+        if (name === "email") setEmailCheckResult("");
+    };
+
+    const handleEmailCheck = async () => {
+        if (!formData.email) {
+            setEmailCheckResult("Please enter an email to check.");
+            return;
+        }
+
+        try {
+            const response = await axios.get(`http://localhost:8080/api/auth/check-email?email=${formData.email}`);
+            if (response.data.exists) {
+                setEmailCheckResult("This email is already registered.");
+            } else {
+                setEmailCheckResult("This email is available.");
+            }
+        } catch (error) {
+            setEmailCheckResult("An error occurred while checking the email.");
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
+        if (!formData.email || !formData.password || (!isLoginMode && !formData.username)) {
+            alert("All fields are required.");
+            return;
+        }
+
         if (!isLoginMode && formData.password !== formData.confirmPassword) {
-            alert("Mật khẩu không khớp!");
+            alert("Passwords do not match!");
             return;
         }
-    
+
         if (formData.password.length < 6) {
-            alert("Mật khẩu phải có ít nhất 6 ký tự!");
+            alert("Password must be at least 6 characters!");
             return;
         }
-    
+
         try {
-            if (isLoginMode) {
-                // Gọi API đăng nhập
-                const response = await axios.post("http://localhost:8080/api/auth/login", {
-                    email: formData.email,
-                    password: formData.password,
-                });
-    
-                console.log("Đăng nhập thành công:", response.data);
-            } else {
-                // Gọi API đăng ký
-                const response = await axios.post("http://localhost:8080/api/auth/create", {
-                    name: formData.name,
-                    email: formData.email,
-                    password: formData.password,
-                });
-    
-                console.log("Đăng ký thành công:", response.data);
-            }
-    
+            const payload = {
+                username: formData.username,
+                email: formData.email,
+                password: formData.password,
+            };
+
+            const url = isLoginMode
+                ? "http://localhost:8080/api/auth/login"
+                : "http://localhost:8080/api/auth/create";
+
+            const response = await axios.post(url, payload);
+            console.log("Success:", response.data);
+
             setShowSuccessPopup(true);
-    
+
             setTimeout(() => {
                 setShowSuccessPopup(false);
                 toggle();
                 window.location.href = "/";
             }, 3000);
         } catch (error) {
-            console.error("Lỗi API:", error.response?.data || error.message);
-            alert(error.response?.data?.message || "Đã có lỗi xảy ra!");
+            console.error("API error:", error.response?.data || error.message);
+            alert(error.response?.data?.message || "An error occurred!");
         }
     };
-    
+
     return (
         <div className="modal-overlay">
             <div className="modal-content">
@@ -83,14 +100,14 @@ const LoginModal = ({ isOpen, toggle }) => {
                 <form onSubmit={handleSubmit}>
                     {!isLoginMode && (
                         <div className="form-group">
-                            <label htmlFor="name">Name</label>
+                            <label htmlFor="username">Username</label>
                             <input
                                 type="text"
-                                id="name"
-                                name="name"
-                                value={formData.name}
+                                id="username"
+                                name="username"
+                                value={formData.username}
                                 onChange={handleChange}
-                                placeholder="Enter your name"
+                                placeholder="Enter your username"
                                 required
                             />
                         </div>
@@ -98,15 +115,33 @@ const LoginModal = ({ isOpen, toggle }) => {
 
                     <div className="form-group">
                         <label htmlFor="email">Email</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            placeholder="Enter your email"
-                            required
-                        />
+                        <div className="d-flex align-items-center">
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                placeholder="Enter your email"
+                                required
+                                style={{ flex: 2, marginRight: "10px" }}
+                            />
+                            {!isLoginMode && (
+                                <button
+                                    type="button"
+                                    className="btn pb-2 pt-2 mb-1 btn-secondary btn-sm"
+                                    onClick={handleEmailCheck}
+                                    style={{ whiteSpace: "nowrap", flex: 1 }}
+                                >
+                                    Check Email
+                                </button>
+                            )}
+                        </div>
+                        {emailCheckResult && (
+                            <small className={emailCheckResult.includes("available") ? "text-success" : "text-danger"}>
+                                {emailCheckResult}
+                            </small>
+                        )}
                     </div>
 
                     <div className="form-group">
