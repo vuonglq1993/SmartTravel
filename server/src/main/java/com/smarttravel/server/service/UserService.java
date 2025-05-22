@@ -18,7 +18,7 @@ public class UserService {
     public User registerUser(UserDTO userDTO) {
         // Tạo đối tượng User từ DTO
         User user = new User();
-        user.setName(userDTO.getUsername());
+        user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
         user.setPassword(
                 PasswordEncryptor.encryptPasswordMD5(userDTO.getPassword())
@@ -31,7 +31,7 @@ public class UserService {
         ResultUser resultUser = new ResultUser();
 
         Optional<User> existingUser =
-                userRepository.findByname(userDTO.getUsername());
+                userRepository.findByUsername(userDTO.getUsername());
 
         if (existingUser.isPresent()) {
             String hashedPassword = PasswordEncryptor.encryptPasswordMD5(userDTO.getPassword());
@@ -41,7 +41,7 @@ public class UserService {
                 // Đăng nhập thành công
                 User loggedInUser = new User();
                 loggedInUser.setId(existingUser.get().getId());
-                loggedInUser.setName(existingUser.get().getName());
+                loggedInUser.setUsername(existingUser.get().getUsername());
 
                 resultUser.setResult(true);
                 resultUser.setData(loggedInUser);
