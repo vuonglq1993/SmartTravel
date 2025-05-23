@@ -1,7 +1,6 @@
 import React from "react";
 import "../Breadcrumbs/breadcrumbs.css";
-import { NavLink } from "react-router-dom";
-import { Breadcrumb, Container, Row } from "react-bootstrap";
+import {Container} from "react-bootstrap";
 
 
 
@@ -21,23 +20,6 @@ const Breadcrumbs = (props) => {
         </div>
       </div>
       <div className="navbar-link py-1">
-        <Container>
-          <Row>
-            <Breadcrumb>
-              <Breadcrumb.Item active>
-                <NavLink to="/">
-                  <i className="bi bi-house-door-fill me-1"></i> Home
-                </NavLink>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item active>{props.pagename}</Breadcrumb.Item>
-              {props.childpagename ? (
-                <Breadcrumb.Item active>{props.childpagename}</Breadcrumb.Item>
-              ) : (
-                ""
-              )}
-            </Breadcrumb>
-          </Row>
-        </Container>
       </div>
     </>
   );

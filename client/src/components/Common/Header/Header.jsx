@@ -56,7 +56,7 @@ const Header = () => {
           </Offcanvas.Header>
           <Offcanvas.Body className="Offcanvascolor">
             <Nav className="justify-content-center flex-grow-1 pe-3">
-              <NavLink className="nav-link m-3" to="/TechwizDui" onClick={closeMenu}>Home</NavLink>
+              <NavLink className="nav-link m-3" to="/" onClick={closeMenu}>Home</NavLink>
               <NavLink className="nav-link m-3" to="/about-us" onClick={closeMenu}>ABOUT US</NavLink>
               <NavLink className="nav-link m-3" to="/tours" onClick={closeMenu}>TOURS</NavLink>
               <NavLink className="nav-link m-3" to="/news" onClick={closeMenu}>NEWS</NavLink>
