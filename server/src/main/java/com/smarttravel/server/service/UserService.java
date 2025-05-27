@@ -6,6 +6,8 @@ import com.smarttravel.server.repository.UserRepository;
 import com.smarttravel.server.security.PasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.Optional;
 
@@ -15,6 +17,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional
     public User registerUser(UserDTO userDTO) {
         // Tạo đối tượng User từ DTO
         User user = new User();
@@ -53,6 +56,9 @@ public class UserService {
         resultUser.setResult(false);
         resultUser.setData(null);
         return resultUser;
+    }
+    public boolean checkEmailExists(String email) {
+        return userRepository.existsByEmail(email);
     }
 }
 
