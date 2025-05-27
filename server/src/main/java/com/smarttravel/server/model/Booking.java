@@ -84,4 +84,8 @@ public class Booking {
     }
 
     // getters, setters
+    @PrePersist
+    protected void onCreate() {
+        this.bookingDate = LocalDateTime.now();
+    }
 }
