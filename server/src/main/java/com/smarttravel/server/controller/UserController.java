@@ -6,8 +6,10 @@ import com.smarttravel.server.dto.UserDTO;
 import com.smarttravel.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.Map;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -33,5 +35,20 @@ public class UserController {
     public String getStatus() {
         return "Server is running";
     }
+
+    @GetMapping("/check-email")
+    public ResponseEntity<Map<String, Object>> checkEmail(@RequestParam("email") String email) {
+        boolean exists = userService.checkEmailExists(email);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("exists", exists);
+        response.put("message", exists ? "Email đã được đăng ký." : "Email có thể sử dụng.");
+
+        return ResponseEntity.ok(response);
+    }
+
 }
+
+
+
 

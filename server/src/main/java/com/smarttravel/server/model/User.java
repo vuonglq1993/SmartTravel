@@ -34,11 +34,11 @@ public class User {
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+        if (this.role == null) {
+            this.role = "user";
+        }
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-
-    }
 
     public int getId() {
         return id;
