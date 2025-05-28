@@ -3,14 +3,13 @@ package com.smarttravel.server.service;
 import com.smarttravel.server.model.Tour;
 import com.smarttravel.server.repository.TourRepository;
 import com.smarttravel.server.specification.TourSpecification;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.util.List;
-
 
 @Service
 public class TourService {
@@ -18,7 +17,7 @@ public class TourService {
     @Autowired
     private TourRepository tourRepository;
 
-    public Page<Tour> searchTours(
+    public List<Tour> searchTours(
             Boolean available,
             LocalDate startDate,
             LocalDate endDate,
@@ -54,7 +53,7 @@ public class TourService {
             spec = spec.and(TourSpecification.hasCountry(country));
         }
 
-        return tourRepository.findAll(spec, pageable);
+        // Trả về danh sách từ trang được phân trang (content)
+        return tourRepository.findAll(spec, pageable).getContent();
     }
 }
-

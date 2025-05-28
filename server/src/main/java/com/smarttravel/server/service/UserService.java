@@ -1,13 +1,14 @@
 package com.smarttravel.server.service;
+
 import com.smarttravel.server.model.User;
 import com.smarttravel.server.dto.UserDTO;
 import com.smarttravel.server.dto.ResultUser;
 import com.smarttravel.server.repository.UserRepository;
 import com.smarttravel.server.security.PasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import java.util.Optional;
 
@@ -19,7 +20,11 @@ public class UserService {
 
     @Transactional
     public User registerUser(UserDTO userDTO) {
-        // Tạo đối tượng User từ DTO
+        // Kiểm tra email đã tồn tại chưa
+        if (checkEmailExists(userDTO.getEmail())) {
+            throw new IllegalArgumentException("Email đã tồn tại, không thể đăng ký.");
+        }
+
         User user = new User();
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
@@ -27,14 +32,18 @@ public class UserService {
                 PasswordEncryptor.encryptPasswordMD5(userDTO.getPassword())
         );
 
-        return userRepository.save(user);
+        try {
+            return userRepository.save(user);
+        } catch (DataIntegrityViolationException ex) {
+            // Nếu có race condition gây trùng email khi lưu
+            throw new IllegalArgumentException("Email đã tồn tại (lỗi từ database).");
+        }
     }
 
     public ResultUser loginUser(UserDTO userDTO) {
         ResultUser resultUser = new ResultUser();
 
-        Optional<User> existingUser =
-                userRepository.findByUsername(userDTO.getUsername());
+        Optional<User> existingUser = userRepository.findByUsername(userDTO.getUsername());
 
         if (existingUser.isPresent()) {
             String hashedPassword = PasswordEncryptor.encryptPasswordMD5(userDTO.getPassword());
@@ -57,8 +66,8 @@ public class UserService {
         resultUser.setData(null);
         return resultUser;
     }
+
     public boolean checkEmailExists(String email) {
         return userRepository.existsByEmail(email);
     }
 }
-

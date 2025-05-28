@@ -1,4 +1,5 @@
 package com.smarttravel.server.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class Destination {
     private String imageUrl;
 
     @OneToMany(mappedBy = "destination")
+    @JsonIgnore
     private List<Tour> tours;
 
     public int getId() {
