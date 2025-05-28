@@ -22,7 +22,7 @@ public class TourController {
     private TourService tourService;
 
     @GetMapping("/search")
-    public ResponseEntity<Page<Tour>> searchTours(
+    public ResponseEntity<List<Tour>> searchTours(
             @RequestParam(required = false) Boolean available,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
@@ -38,7 +38,7 @@ public class TourController {
         Sort.Direction direction = sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
 
-        Page<Tour> result = tourService.searchTours(
+        List<Tour> result = tourService.searchTours(
                 available, startDate, endDate, minPrice, maxPrice, destinationName, country, pageable);
 
         return ResponseEntity.ok(result);

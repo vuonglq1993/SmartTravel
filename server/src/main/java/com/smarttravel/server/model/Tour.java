@@ -1,4 +1,5 @@
 package com.smarttravel.server.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -28,12 +29,15 @@ public class Tour {
     private Integer capacity;
 
     @OneToMany(mappedBy = "tour")
+    @JsonIgnore
     private List<Booking> bookings;
 
     @OneToMany(mappedBy = "tour")
+    @JsonIgnore
     private List<Review> reviews;
 
     @OneToMany(mappedBy = "tour")
+    @JsonIgnore
     private List<Image> images;
 
     public int getId() {

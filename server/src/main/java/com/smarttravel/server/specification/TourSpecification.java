@@ -1,7 +1,10 @@
 package com.smarttravel.server.specification;
 
 import com.smarttravel.server.model.Tour;
+import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
+import jakarta.persistence.criteria.Join;
+
 
 import java.time.LocalDate;
 
@@ -29,8 +32,10 @@ public class TourSpecification {
     }
 
     public static Specification<Tour> hasCountry(String country) {
-        return (root, query, cb) ->
-                cb.like(cb.lower(root.get("destination").get("country")), "%" + country.toLowerCase() + "%");
+        return (root, query, cb) -> {
+            Join<Object, Object> destinationJoin = root.join("destination", JoinType.INNER);
+            return cb.like(cb.lower(destinationJoin.get("country")), "%" + country.toLowerCase() + "%");
+        };
     }
 }
 
