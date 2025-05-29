@@ -1,0 +1,28 @@
+.admin-sidebar {
+  width: 220px;
+  background-color: #0059b3;
+  color: white;
+  height: 100%;
+  padding: 2rem 1rem;
+}
+
+.admin-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.admin-sidebar li {
+  margin: 1rem 0;
+}
+
+.admin-sidebar a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 0.5rem;
+}
+
+.admin-sidebar a:hover {
+  background-color: #004080;
+  border-radius: 4px;
+}

@@ -1,0 +1,39 @@
+.state-container {
+  padding: 2rem;
+  min-height: 80vh;
+  background-color: #f5f7fa;
+}
+
+.state-container h2 {
+  margin-bottom: 1.5rem;
+  color: #003366;
+}
+
+.state-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.state-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.state-card h3 {
+  margin: 0;
+  font-size: 2rem;
+  color: #222;
+}
+
+.state-card p {
+  margin: 0.5rem 0 0;
+  color: #555;
+}
+
+.state-card:hover {
+  transform: scale(1.03);
+}
