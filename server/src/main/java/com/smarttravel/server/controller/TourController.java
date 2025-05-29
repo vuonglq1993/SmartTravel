@@ -3,7 +3,6 @@ package com.smarttravel.server.controller;
 import com.smarttravel.server.model.Tour;
 import com.smarttravel.server.service.TourService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,6 +19,18 @@ public class TourController {
 
     @Autowired
     private TourService tourService;
+
+    @GetMapping
+    public ResponseEntity<List<Tour>> getAllTours() {
+        List<Tour> tours = tourService.getAllTours();
+        return ResponseEntity.ok(tours);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Tour> getTourById(@PathVariable int id) {
+        Tour tour = tourService.getTourById(id);
+        return ResponseEntity.ok(tour);
+    }
 
     @GetMapping("/search")
     public ResponseEntity<List<Tour>> searchTours(
@@ -44,5 +55,3 @@ public class TourController {
         return ResponseEntity.ok(result);
     }
 }
-
-
