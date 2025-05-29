@@ -10,12 +10,22 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TourService {
 
     @Autowired
     private TourRepository tourRepository;
+
+    public Tour getTourById(int id) {
+        return tourRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy tour với ID: " + id));
+    }
+
+    public List<Tour> getAllTours() {
+        return tourRepository.findAll();
+    }
 
     public List<Tour> searchTours(
             Boolean available,
@@ -53,7 +63,6 @@ public class TourService {
             spec = spec.and(TourSpecification.hasCountry(country));
         }
 
-        // Trả về danh sách từ trang được phân trang (content)
         return tourRepository.findAll(spec, pageable).getContent();
     }
 }
