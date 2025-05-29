@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService1 {
 
     @Autowired
     private UserRepository userRepository;
@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepository.findById((long) id);
         if (optionalUser.isPresent()) {
             User existing = optionalUser.get();
-            existing.setName(updatedUser.getName());
+            existing.setUsername(updatedUser.getUsername());
             existing.setEmail(updatedUser.getEmail());
             existing.setPassword(updatedUser.getPassword());
             return userRepository.save(existing);

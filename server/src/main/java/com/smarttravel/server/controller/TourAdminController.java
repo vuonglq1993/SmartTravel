@@ -1,7 +1,7 @@
 package com.smarttravel.server.controller;
 
 import com.smarttravel.server.model.Tour;
-import com.smarttravel.server.service.tour.TourService;
+import com.smarttravel.server.service.tour.TourService1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,7 @@ import java.util.List;
 public class TourAdminController {
 
     @Autowired
-    private TourService tourService;
+    private TourService1 tourService;
 
     @GetMapping
     public List<Tour> getAllTours() {

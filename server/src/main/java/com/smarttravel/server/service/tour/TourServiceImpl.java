@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TourServiceImpl implements TourService {
+public class TourServiceImpl implements TourService1 {
 
     @Autowired
     private TourRepository tourRepository;
