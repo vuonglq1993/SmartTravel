@@ -5,12 +5,12 @@ import com.smarttravel.server.repository.TourRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TourServiceImpl implements TourService {
+public class TourServiceImpl implements TourService1 {
+
 
     @Autowired
     private TourRepository tourRepository;
