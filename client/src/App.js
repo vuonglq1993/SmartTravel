@@ -6,7 +6,7 @@ import Footer from "./components/Common/Footer/Footer";
 import About from "./pages/About/About";
 import Contact from "./pages/Contact/Contact";
 import Tours from "./pages/Tours/Tours";
-import Tour from "./pages/Fake/Tours";
+import Search from './pages/Search/Search';
 import TourDetails from "./pages/Tours/TourDetails";
 import Booking from "./pages/Booking/Booking";
 import TopPalces from "./pages/Destinations/Destinations";  
@@ -22,7 +22,7 @@ function App() {
               <Route path="/about-us" element={<About />} />
               <Route path="/contact-us" element={<Contact />} />
               <Route path="/tours" element={<Tours />} />
-              <Route path="/search" element={<Tour />} />
+              <Route path="/search" element={<Search />} />
               <Route path="/tour-details" element={<TourDetails />} />
               <Route path="/booking" element={<Booking />} />
               <Route path="/top-places" element={<TopPalces />} />

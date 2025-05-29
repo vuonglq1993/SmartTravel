@@ -1,103 +1,91 @@
-import React, { useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-
-import "../AdvanceSearch/search.css";
-import { Container, Row, Col, Button } from "react-bootstrap";
-// import
-import CustomDropdown from "../CustomDropdown/CustomDropdown";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AdvanceSearch = () => {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const navigate = useNavigate();
 
-  const selectedLocation =(value)=>{
-    console.log("Location", value)
-  }
+  const [formData, setFormData] = useState({
+    available: false,
+    startDate: '',
+    endDate: '',
+    minPrice: '',
+    maxPrice: '',
+    destinationName: '',
+    country: '',
+    sortBy: 'price',
+    sortDir: 'asc',
+  });
 
-  const selectedGuest =(value)=>{
-    console.log("Guest ", value)
-  }
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
+  };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const params = new URLSearchParams();
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value !== '' && value !== null && value !== false) {
+        params.append(key, value);
+      }
+    });
+
+    navigate(`/search?${params.toString()}`);
+  };
 
   return (
-      <>
-          <section className="box-search-advance">
-              <Container>
-                  <Row>
-                      <Col md={12} xs={12}>
-                          <div className="box-search shadow-sm">
-                              <div className="item-search">
-                                  {/*  Using Props to Pass Data */}
-                                  <CustomDropdown
-                                      label="Location"
-                                      onSelect={selectedLocation}
-                                      options={[
-                                          "Dinh Doc Lap,Viet Nam",
-                                          "Ho Ba Mau, Viet Nam",
-                                          "Phu Ket, Thailand",
-                                          "Vinh Ha Long, Viet Nam",
-                                          "Lang Co, Hue, Viet Nam",
-                                      ]}
-                                  />
-                              </div>
-                              <div className="item-search item-search-2">
-                                  <label className="item-search-label">
-                                      {" "}
-                                      Check in{" "}
-                                  </label>
-                                  <DatePicker
-                                      selected={startDate}
-                                      onChange={(date) => setStartDate(date)}
-                                      selectsStart
-                                      startDate={startDate}
-                                      endDate={endDate}
-                                      dateFormat="dd, MMMM, yyyy"
-                                  />
-                              </div>
-                              <div className="item-search item-search-2">
-                                  <label className="item-search-label">
-                                      {" "}
-                                      Check Out{" "}
-                                  </label>
-                                  <DatePicker
-                                      selected={endDate}
-                                      onChange={(date) => setEndDate(date)}
-                                      selectsEnd
-                                      startDate={endDate}
-                                      endDate={startDate}
-                                      dateFormat="dd, MMMM, yyyy"
-                                  />
-                              </div>
-                              <div className="item-search bd-none">
-                                  <CustomDropdown
-                                      label="Guest"
-                                      onSelect={selectedGuest}
-                                      options={[
-                                          "2 adults, 1 children",
-                                          "	2 adults, 1 children",
-                                          "2 adults, 3 children",
-                                          "1 adult, 2 children",
-                                          "1 adult, 3 children",
-                                          "1 adult, 1 children"
-                                      ]}
-                                  />
-                              </div>
-                              <div className="item-search bd-none">
-                                  <Link to="/search" style={{ textDecoration: "none" }}>
-                                      <Button className="primaryBtn flex-even d-flex justify-content-center" >
-                                          <i className="bi bi-search me-2"></i>{" "}
-                                          Search
-                                      </Button>
-                                  </Link>
-                              </div>
-                          </div>
-                      </Col>
-                  </Row>
-              </Container>
-          </section>
-      </>
+    <form onSubmit={handleSubmit} className="p-4 border rounded bg-light">
+      <div className="row mb-3">
+        <div className="col">
+          <input type="text" className="form-control" placeholder="Destination" name="destinationName" value={formData.destinationName} onChange={handleChange} />
+        </div>
+        <div className="col">
+          <input type="text" className="form-control" placeholder="Country" name="country" value={formData.country} onChange={handleChange} />
+        </div>
+      </div>
+
+      <div className="row mb-3">
+        <div className="col">
+          <input type="date" className="form-control" name="startDate" value={formData.startDate} onChange={handleChange} />
+        </div>
+        <div className="col">
+          <input type="date" className="form-control" name="endDate" value={formData.endDate} onChange={handleChange} />
+        </div>
+      </div>
+
+      <div className="row mb-3">
+        <div className="col">
+          <input type="number" className="form-control" placeholder="Min Price" name="minPrice" value={formData.minPrice} onChange={handleChange} />
+        </div>
+        <div className="col">
+          <input type="number" className="form-control" placeholder="Max Price" name="maxPrice" value={formData.maxPrice} onChange={handleChange} />
+        </div>
+      </div>
+
+      <div className="form-check mb-3">
+        <input className="form-check-input" type="checkbox" name="available" checked={formData.available} onChange={handleChange} />
+        <label className="form-check-label">Available only</label>
+      </div>
+
+      <div className="row mb-3">
+        <div className="col">
+          <select className="form-select" name="sortBy" value={formData.sortBy} onChange={handleChange}>
+            <option value="price">Price</option>
+            <option value="startDate">Start Date</option>
+            <option value="destinationName">Destination</option>
+          </select>
+        </div>
+        <div className="col">
+          <select className="form-select" name="sortDir" value={formData.sortDir} onChange={handleChange}>
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" className="btn btn-primary w-100">Search</button>
+    </form>
   );
 };
 
