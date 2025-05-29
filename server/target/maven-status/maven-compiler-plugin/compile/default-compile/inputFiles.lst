@@ -1,5 +1,6 @@
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/ServerApplication.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/WebConfig.java
+/Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/controller/TourController.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/controller/UserController.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/dto/ResultUser.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/dto/UserDTO.java
@@ -10,6 +11,9 @@
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/model/Review.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/model/Tour.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/model/User.java
+/Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/repository/TourRepository.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/repository/UserRepository.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/security/PasswordEncryptor.java
+/Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/service/TourService.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/service/UserService.java
+/Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/specification/TourSpecification.java
