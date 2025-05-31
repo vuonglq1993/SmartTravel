@@ -133,7 +133,7 @@ const About = () => {
               />
             </Col>
           </Row>
-          <Row className="mt-4 mb-4 align-items-center">
+          {/* <Row className="mt-4 mb-4 align-items-center">
             <Col md="12">
               <h3 className="h2 fw-bold">Our Teams</h3>
             </Col>
@@ -155,7 +155,7 @@ const About = () => {
                 </Col>
               ))}
             </Row>
-          </Row>
+          </Row> */}
           <Row className="mt-5"></Row>
           <Row className="mt-5"></Row>
           <Row className="mt-5">

@@ -8,17 +8,21 @@ const PopularCard = ({ val }) => {
 
   const {
     id = "",
-    image = "https://via.placeholder.com/300x200?text=No+Image",
-    location = "Unknown location",
-    title = "Untitled",
+    title = "Untitled tour",
     rating = 0,
     reviews = 0,
     category = [],
     price = 0,
     afterDiscount = null,
-    days = "N/A"
+    days = "N/A",
+    startDate = "",
+    destination = {}
   } = val;
-
+  const country = destination.country || "Unknown country";
+  const destinationName = destination.name || "Unknown destination";
+  const imageUrl = destination.imageUrl || "https://i.postimg.cc/02pXsCdq/Ulun-Danu-Beratan-Temple.png";
+  
+  // Nếu category là string, tách thành mảng
   const categories = Array.isArray(category)
     ? category
     : typeof category === "string"
@@ -29,20 +33,20 @@ const PopularCard = ({ val }) => {
     <Card className="rounded-2 shadow-sm popular">
       <Card.Img
         variant="top"
-        src={image}
+        src={imageUrl}
         className="img-fluid"
         alt="Tour Image"
       />
       <Card.Body>
         <Card.Text>
           <i className="bi bi-geo-alt"></i>
-          <span className="text ms-1">{location}</span>
+          <span className="text ms-1">{destinationName}, {country}</span>
         </Card.Text>
 
         <Card.Title>
           <NavLink
             className="body-text text-dark text-decoration-none"
-            to={`/tour-details/${id || 1}`} // Điều hướng đúng ID
+            to={`/tours/${id}`} 
           >
             {title}
           </NavLink>
@@ -65,7 +69,7 @@ const PopularCard = ({ val }) => {
       </Card.Body>
 
       <Card.Footer className="py-4">
-        {afterDiscount && (
+        {afterDiscount !== null && afterDiscount < price && (
           <p className="text-decoration-line-through text-muted mb-1">
             ${price.toFixed(2)}
           </p>
@@ -73,12 +77,16 @@ const PopularCard = ({ val }) => {
 
         <Stack direction="horizontal" className="justify-content-between mt-1">
           <p className="mb-0">
-            From <b>${(afterDiscount || price).toFixed(2)}</b>
+            From <b>${(afterDiscount !== null && afterDiscount < price ? afterDiscount : price).toFixed(2)}</b>
           </p>
           <p className="mb-0">
             <i className="bi bi-clock me-1"></i> {days}
           </p>
         </Stack>
+
+        <p className="mt-2">
+          <small>Startdate: {startDate ? new Date(startDate).toLocaleDateString() : "N/A"}</small>
+        </p>
       </Card.Footer>
     </Card>
   );

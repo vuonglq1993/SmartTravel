@@ -1,91 +1,65 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import "../AdvanceSearch/search.css"; // giữ css bạn đã có
 
-const AdvanceSearch = () => {
-  const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    available: false,
-    startDate: '',
-    endDate: '',
-    minPrice: '',
-    maxPrice: '',
-    destinationName: '',
-    country: '',
-    sortBy: 'price',
-    sortDir: 'asc',
-  });
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const params = new URLSearchParams();
-    Object.entries(formData).forEach(([key, value]) => {
-      if (value !== '' && value !== null && value !== false) {
-        params.append(key, value);
-      }
-    });
-
-    navigate(`/search?${params.toString()}`);
-  };
-
+const AdvanceSearch = ({ filters, setFilters, onSearch }) => {
   return (
-    <form onSubmit={handleSubmit} className="p-4 border rounded bg-light">
-      <div className="row mb-3">
-        <div className="col">
-          <input type="text" className="form-control" placeholder="Destination" name="destinationName" value={formData.destinationName} onChange={handleChange} />
-        </div>
-        <div className="col">
-          <input type="text" className="form-control" placeholder="Country" name="country" value={formData.country} onChange={handleChange} />
-        </div>
-      </div>
-
-      <div className="row mb-3">
-        <div className="col">
-          <input type="date" className="form-control" name="startDate" value={formData.startDate} onChange={handleChange} />
-        </div>
-        <div className="col">
-          <input type="date" className="form-control" name="endDate" value={formData.endDate} onChange={handleChange} />
-        </div>
-      </div>
-
-      <div className="row mb-3">
-        <div className="col">
-          <input type="number" className="form-control" placeholder="Min Price" name="minPrice" value={formData.minPrice} onChange={handleChange} />
-        </div>
-        <div className="col">
-          <input type="number" className="form-control" placeholder="Max Price" name="maxPrice" value={formData.maxPrice} onChange={handleChange} />
-        </div>
-      </div>
-
-      <div className="form-check mb-3">
-        <input className="form-check-input" type="checkbox" name="available" checked={formData.available} onChange={handleChange} />
-        <label className="form-check-label">Available only</label>
-      </div>
-
-      <div className="row mb-3">
-        <div className="col">
-          <select className="form-select" name="sortBy" value={formData.sortBy} onChange={handleChange}>
-            <option value="price">Price</option>
-            <option value="startDate">Start Date</option>
-            <option value="destinationName">Destination</option>
-          </select>
-        </div>
-        <div className="col">
-          <select className="form-select" name="sortDir" value={formData.sortDir} onChange={handleChange}>
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-          </select>
-        </div>
-      </div>
-
-      <button type="submit" className="btn btn-primary w-100">Search</button>
-    </form>
+    <section className="box-search-advance">
+      <Container>
+        <Row>
+          <Col md={12} xs={12}>
+            <div className="box-search shadow-sm p-3 d-flex flex-wrap align-items-center gap-3">
+              <Form.Control
+                type="text"
+                placeholder="Destination Name"
+                value={filters.destinationName || ""}
+                onChange={(e) =>
+                  setFilters({ ...filters, destinationName: e.target.value })
+                }
+                style={{ maxWidth: 250 }}
+              />
+              <Form.Control
+                type="text"
+                placeholder="Country"
+                value={filters.country || ""}
+                onChange={(e) =>
+                  setFilters({ ...filters, country: e.target.value })
+                }
+                style={{ maxWidth: 250 }}
+              />
+              <Form.Control
+                type="number"
+                placeholder="Min Price"
+                value={filters.minPrice || ""}
+                onChange={(e) =>
+                  setFilters({ ...filters, minPrice: e.target.value })
+                }
+                style={{ maxWidth: 150 }}
+                min={0}
+              />
+              <Form.Control
+                type="number"
+                placeholder="Max Price"
+                value={filters.maxPrice || ""}
+                onChange={(e) =>
+                  setFilters({ ...filters, maxPrice: e.target.value })
+                }
+                style={{ maxWidth: 150 }}
+                min={0}
+              />
+              <Button
+                variant="primary"
+                onClick={onSearch}
+                className="ms-auto"
+                style={{ minWidth: 120 }}
+              >
+                <i className="bi bi-search me-2"></i> Search
+              </Button>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </section>
   );
 };
 

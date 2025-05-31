@@ -11,8 +11,14 @@ import axios from "axios";
 const Tours = () => {
   const [show, setShow] = useState(false);
   const [tours, setTours] = useState([]);
-
+  const [filters, setFilters] = useState({
+    destinationName: "",
+    country: "",
+    minPrice: "",
+    maxPrice: "",
+  });
   const [currentPage, setCurrentPage] = useState(0);
+
   const itemsPerPage = 6;
   const offset = currentPage * itemsPerPage;
   const currentItems = tours.slice(offset, offset + itemsPerPage);
@@ -24,14 +30,46 @@ const Tours = () => {
     setCurrentPage(selected);
   };
 
-  // Fetch toàn bộ tours từ backend
+  // Fetch toàn bộ tours không filter
   const fetchTours = async () => {
     try {
-      const res = await axios.get("localhost:8080/api/tours");
+      const res = await axios.get("http://localhost:8080/api/tours");
       setTours(res.data);
     } catch (error) {
       console.error("Failed to fetch tours:", error);
     }
+  };
+
+  // Fetch tours theo filter
+  const fetchFilteredTours = async () => {
+    try {
+      const params = {};
+      if (filters.destinationName) params.destinationName = filters.destinationName;
+      if (filters.country) params.country = filters.country;
+      if (filters.minPrice) params.minPrice = filters.minPrice;
+      if (filters.maxPrice) params.maxPrice = filters.maxPrice;
+
+      const res = await axios.get("http://localhost:8080/api/tours/search", {
+        params: {
+          ...params,
+          page: 0,
+          size: 100,
+          sortBy: "price",
+          sortDir: "asc",
+        },
+      });
+
+      setTours(res.data);
+      setCurrentPage(0);
+      setShow(false); // ẩn filter panel nếu mở trên mobile
+    } catch (error) {
+      console.error("Failed to search tours:", error);
+    }
+  };
+
+  // Khi click nút Search trên AdvanceSearch
+  const handleSearch = () => {
+    fetchFilteredTours();
   };
 
   useEffect(() => {
@@ -43,7 +81,8 @@ const Tours = () => {
   return (
     <>
       <Breadcrumbs title="Tours" pagename="Tours" />
-      <AdvanceSearch />
+      <AdvanceSearch filters={filters} setFilters={setFilters} onSearch={handleSearch} />
+
       <section className="py-5 tour_list">
         <Container>
           <Row>
