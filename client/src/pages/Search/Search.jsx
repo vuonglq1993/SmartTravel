@@ -38,7 +38,7 @@ function SearchTours() {
     params.append("sortDir", sortDir);
 
     try {
-      const response = await fetch(`/api/tours/search?${params.toString()}`);
+      const response = await fetch(`http://localhost:8080/api/tours/search?${params.toString()}`);
       if (!response.ok) {
         throw new Error("Failed to fetch tours");
       }
