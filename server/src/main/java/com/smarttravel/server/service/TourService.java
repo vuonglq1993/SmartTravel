@@ -53,6 +53,10 @@ public class TourService {
 
         if (minPrice != null && maxPrice != null) {
             spec = spec.and(TourSpecification.hasPriceBetween(minPrice, maxPrice));
+        } else if (minPrice != null) {
+            spec = spec.and(TourSpecification.hasPriceGreaterThanOrEqualTo(minPrice));
+        } else if (maxPrice != null) {
+            spec = spec.and(TourSpecification.hasPriceLessThanOrEqualTo(maxPrice));
         }
 
         if (destinationName != null && !destinationName.isEmpty()) {

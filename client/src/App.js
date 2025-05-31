@@ -23,7 +23,7 @@ function App() {
               <Route path="/contact-us" element={<Contact />} />
               <Route path="/tours" element={<Tours />} />
               <Route path="/search" element={<Search />} />
-              <Route path="/tour-details" element={<TourDetails />} />
+              <Route path="/tours/:id" element={<TourDetails />} />
               <Route path="/booking" element={<Booking />} />
               <Route path="/top-places" element={<TopPalces />} />
               <Route path="/gallery" element={<PhotoGallery />} />
