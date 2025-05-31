@@ -37,5 +37,13 @@ public class TourSpecification {
             return cb.like(cb.lower(destinationJoin.get("country")), "%" + country.toLowerCase() + "%");
         };
     }
+
+    public static Specification<Tour> hasPriceGreaterThanOrEqualTo(Double minPrice) {
+        return (root, query, cb) -> cb.greaterThanOrEqualTo(root.get("price"), minPrice);
+    }
+
+    public static Specification<Tour> hasPriceLessThanOrEqualTo(Double maxPrice) {
+        return (root, query, cb) -> cb.lessThanOrEqualTo(root.get("price"), maxPrice);
+    }
 }
 
