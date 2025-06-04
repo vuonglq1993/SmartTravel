@@ -3,7 +3,7 @@ import '../styles/footer.css';
 import { Col, Container, Row, ListGroup } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 // Nếu đã đặt tại: admin/src/tawktochat/tawktochat.jsx
-import TawkToChat from "../tawktochat/tawktochat";
+//import TawkToChat from "../tawktochat/tawktochat";
 
 
 const Footer = () => {
@@ -92,10 +92,6 @@ const Footer = () => {
           </Row>
         </Container>
       </div>
-
-
-      <TawkToChat />
-
     </footer>
   );
 };
