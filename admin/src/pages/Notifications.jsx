@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+
 import "../styles/Notifications.css";
 
 const Notifications = () => {
@@ -38,7 +37,7 @@ const Notifications = () => {
 
   return (
     <>
-      <Header />
+      
       <div className="notif-container">
         <h2>Notifications Management</h2>
 
@@ -81,7 +80,7 @@ const Notifications = () => {
           </tbody>
         </table>
       </div>
-      <Footer />
+      
     </>
   );
 };

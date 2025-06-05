@@ -1,6 +1,5 @@
 import React from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+
 import "../styles/StateManagement.css";
 
 const StateManagement = () => {
@@ -17,7 +16,7 @@ const StateManagement = () => {
 
   return (
     <>
-      <Header />
+      
       <div className="state-container">
         <h2>System Status Overview</h2>
         <div className="state-grid">
@@ -29,7 +28,7 @@ const StateManagement = () => {
           ))}
         </div>
       </div>
-      <Footer />
+      
     </>
   );
 };
