@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+
 import "../styles/ReviewManagement.css";
 
 const ReviewManagement = () => {
@@ -41,7 +40,7 @@ const ReviewManagement = () => {
 
   return (
     <>
-      <Header />
+     
       <div className="review-container">
         <h2>Review Management</h2>
         <table className="review-table">
@@ -80,7 +79,7 @@ const ReviewManagement = () => {
           </tbody>
         </table>
       </div>
-      <Footer />
+    
     </>
   );
 };

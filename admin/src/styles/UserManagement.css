@@ -76,3 +76,9 @@
 .delete-btn {
   background-color: #d9534f;
 }
+.error-message {
+  color: red;
+  margin: 0.5rem 0;
+  font-weight: bold;
+  font-size: 0.9rem;
+}

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import com.smarttravel.server.repository.DestinationRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,6 +18,24 @@ public class TourService {
 
     @Autowired
     private TourRepository tourRepository;
+
+    @Autowired
+    private DestinationRepository destinationRepository;
+
+    public Tour createTour(Tour tour) {
+        // ✅ Nếu có image và destination, cập nhật ảnh cho destination
+        if (tour.getImageUrl() != null && tour.getDestination() != null) {
+            int destId = tour.getDestination().getId();
+            destinationRepository.findById(destId).ifPresent(destination -> {
+                destination.setImageUrl(tour.getImageUrl());
+                destinationRepository.save(destination);
+            });
+        }
+
+        return tourRepository.save(tour);
+    }
+
+
 
     public Tour getTourById(int id) {
         return tourRepository.findById(id)
