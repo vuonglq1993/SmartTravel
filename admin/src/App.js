@@ -7,6 +7,7 @@ import StateManagement from "./pages/StateManagement";
 import ReviewManagement from "./pages/ReviewManagement";
 import Notifications from "./pages/Notifications";
 import AdminLayout from "./layouts/AdminLayout";
+import EmailForm from "./pages/EmailForm";
 
 function App() {
   return (
@@ -64,7 +65,7 @@ function App() {
           path="/admin/notifications"
           element={
             <AdminLayout>
-              <Notifications />
+              <EmailForm />
             </AdminLayout>
           }
         />

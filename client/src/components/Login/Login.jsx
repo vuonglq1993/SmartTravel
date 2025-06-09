@@ -3,7 +3,7 @@ import "./Login.css";
 import logo from "../../assets/images/logo/logo co màu.png";
 import axios from "axios";
 
-const LoginModal = ({ isOpen, toggle }) => {
+const LoginModal = ({ isOpen, toggle, setUser }) => {
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [isLoginMode, setIsLoginMode] = useState(true);
     const [emailCheckResult, setEmailCheckResult] = useState("");
@@ -73,13 +73,15 @@ const LoginModal = ({ isOpen, toggle }) => {
             const response = await axios.post(url, payload);
             console.log("Success:", response.data);
 
+            // Save user info to parent
+            setUser(response.data.user || { email: formData.email, username: formData.username });
+
             setShowSuccessPopup(true);
 
             setTimeout(() => {
                 setShowSuccessPopup(false);
                 toggle();
-                window.location.href = "/";
-            }, 3000);
+            }, 2000);
         } catch (error) {
             console.error("API error:", error.response?.data || error.message);
             alert(error.response?.data?.message || "An error occurred!");

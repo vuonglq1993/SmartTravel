@@ -103,11 +103,6 @@ const Home = () => {
   return (
     <>
       <Banner />
-      <AdvanceSearch
-        filters={filters}
-        setFilters={setFilters}
-        onSearch={handleSearch}
-      />
       <Features />
 
       <section className="tours_section slick_slider">

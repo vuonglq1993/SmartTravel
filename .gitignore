@@ -1,0 +1,11 @@
+server/target/classes/com/smarttravel/server/controller/ContactMessageController.class
+server/target/classes/com/smarttravel/server/controller/EmailController.class
+server/target/classes/com/smarttravel/server/dto/ContactMessageDTO.class
+server/target/classes/com/smarttravel/server/dto/EmailDTO.class
+server/target/classes/com/smarttravel/server/model/ContactMessage.class
+server/target/classes/com/smarttravel/server/repository/ContactMessageRepository.class
+server/target/classes/com/smarttravel/server/service/ContactMessageService.class
+server/target/classes/com/smarttravel/server/service/ContactMessageService$GmailEmailService.class
+server/target/classes/com/smarttravel/server/service/GmailEmailService.class
+server/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+server/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
