@@ -1,6 +1,7 @@
 package com.smarttravel.server.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Formula;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -127,4 +128,15 @@ public class Tour {
     public void setImages(List<Image> images) {
         this.images = images;
     }
+
+    @Formula("(SELECT COALESCE(AVG(r.rating), 0) FROM reviews r WHERE r.tour_id = id)")
+private double averageRating;
+
+public double getAverageRating() {
+    return averageRating;
+}
+
+public void setAverageRating(double averageRating) {
+    this.averageRating = averageRating;
+}
 }
