@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:3000") // sửa theo port frontend của bạn
-public class ContactMessageController {
+public class    ContactMessageController {
 
     private final ContactMessageService service;
 
