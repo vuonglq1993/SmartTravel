@@ -133,29 +133,6 @@ const About = () => {
               />
             </Col>
           </Row>
-          {/* <Row className="mt-4 mb-4 align-items-center">
-            <Col md="12">
-              <h3 className="h2 fw-bold">Our Teams</h3>
-            </Col>
-            <Row>
-              {Usdata.map((member) => (
-                <Col key={member.id}>
-                  <div className="card h-100 shadow-sm">
-                    <img
-                      src={member.img}
-                      className="card-img-top"
-                      alt={member.name}
-                    />
-                    <div className="card-body">
-                    <p className="card-title fs-5 fw-bold">{member.name}</p>
-                    <p className="card-text fs-6 fw-semibold mt-3">{member.position}</p>
-                    <p className="card-text fs-6 mt-2">{member.desc}</p>
-                  </div>
-                  </div>
-                </Col>
-              ))}
-            </Row>
-          </Row> */}
           <Row className="mt-5"></Row>
           <Row className="mt-5"></Row>
           <Row className="mt-5">

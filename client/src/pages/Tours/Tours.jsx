@@ -18,6 +18,21 @@ const Tours = () => {
     maxPrice: "",
   });
   const [currentPage, setCurrentPage] = useState(0);
+  const handleFilterChange = async (filters) => {
+    try {
+      const params = {
+        minPrice: filters.minPrice,
+        maxPrice: filters.maxPrice,
+        destinationName: filters.locations?.[0], // ví dụ lấy location đầu tiên
+        // có thể thêm country, durations, ratings nếu muốn
+      };
+
+      const response = await axios.get("/api/tours/search", { params });
+      setTours(response.data);
+    } catch (error) {
+      console.error("Lỗi khi fetch tours:", error);
+    }
+  };
 
   const itemsPerPage = 6;
   const offset = currentPage * itemsPerPage;

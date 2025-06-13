@@ -1,7 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import "../AdvanceSearch/search.css"; // giữ css bạn đã có
-
+import "../AdvanceSearch/search.css";
 const AdvanceSearch = ({ filters, setFilters, onSearch }) => {
   return (
     <section className="box-search-advance">

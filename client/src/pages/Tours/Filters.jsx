@@ -1,157 +1,156 @@
 import React, { useState } from "react";
 import { Accordion, Form } from "react-bootstrap";
-import { location ,Categories, Duration, PriceRange, Ratings} from "../../utils/data";
+import { location, Duration, Ratings } from "../../utils/data";
 
-import "../Tours/tour.css"
-const Filters = () => {
+import "../Tours/tour.css";
+
+const Filters = ({ onFilterChange }) => {
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000);
-
-  const handleMinPriceChange = (event) => {
-      const value = Number(event.target.value);
-      if (value <= maxPrice) setMinPrice(value);
+  const [selectedLocations, setSelectedLocations] = useState([]);
+  const [selectedDurations, setSelectedDurations] = useState([]);
+  const [selectedRatings, setSelectedRatings] = useState([]);
+    
+  const handleMinPriceChange = (e) => {
+    const value = Number(e.target.value);
+    if (value <= maxPrice) {
+      setMinPrice(value);
+      triggerFilterChange({ minPrice: value, maxPrice });
+    }
   };
 
-  const handleMaxPriceChange = (event) => {
-      const value = Number(event.target.value);
-      if (value >= minPrice) setMaxPrice(value);
+  const handleMaxPriceChange = (e) => {
+    const value = Number(e.target.value);
+    if (value >= minPrice) {
+      setMaxPrice(value);
+      triggerFilterChange({ minPrice, maxPrice: value });
+    }
+  };
+
+  const handleCheckboxChange = (value, list, setList, key) => {
+    let updatedList;
+    if (list.includes(value)) {
+      updatedList = list.filter((item) => item !== value);
+    } else {
+      updatedList = [...list, value];
+    }
+    setList(updatedList);
+    triggerFilterChange({ [key]: updatedList });
+  };
+
+  const triggerFilterChange = (changedFields) => {
+    onFilterChange({
+      minPrice,
+      maxPrice,
+      locations: selectedLocations,
+      durations: selectedDurations,
+      ratings: selectedRatings,
+      ...changedFields,
+    });
   };
 
   return (
-      <div className="side_bar">
-          <div className="filter_box shadow-sm rounded-2">
-              <Accordion defaultActiveKey="0">
-                  <Accordion.Item eventKey="0">
-                      <Accordion.Header>Location </Accordion.Header>
-                      <Accordion.Body>
-                          {location.map((location, inx) => {
-                              return (
-                                  <Form.Check
-                                      key={inx}
-                                      type="checkbox"
-                                      id={location}
-                                      label={location}
-                                      value={location}
-                                  />
-                              );
-                          })}
-                      </Accordion.Body>
-                  </Accordion.Item>
-              </Accordion>
+    <div className="side_bar">
+      <div className="filter_box shadow-sm rounded-2">
+        <Accordion defaultActiveKey="0" alwaysOpen>
 
-              <Accordion defaultActiveKey="0">
-                  <Accordion.Item eventKey="1">
-                      <Accordion.Header>Categories </Accordion.Header>
-                      <Accordion.Body>
-                          {Categories.map((category, inx) => {
-                              return (
-                                  <Form.Check
-                                      key={inx}
-                                      type="checkbox"
-                                      id={category}
-                                      label={category}
-                                      value={category}
-                                  />
-                              );
-                          })}
-                      </Accordion.Body>
-                  </Accordion.Item>
-              </Accordion>
+          {/* Location */}
+          <Accordion.Item eventKey="0">
+            <Accordion.Header>Location</Accordion.Header>
+            <Accordion.Body>
+              {location.map((loc, idx) => (
+                <Form.Check
+                  key={idx}
+                  type="checkbox"
+                  id={`loc-${idx}`}
+                  label={loc}
+                  value={loc}
+                  checked={selectedLocations.includes(loc)}
+                  onChange={() =>
+                    handleCheckboxChange(loc, selectedLocations, setSelectedLocations, "locations")
+                  }
+                />
+              ))}
+            </Accordion.Body>
+          </Accordion.Item>
 
-              <Accordion defaultActiveKey="0">
-                  <Accordion.Item eventKey="1">
-                      <Accordion.Header>Duration </Accordion.Header>
-                      <Accordion.Body>
-                          {Duration.map((days, inx) => {
-                              return (
-                                  <Form.Check
-                                      key={inx}
-                                      type="checkbox"
-                                      id={days}
-                                      label={days}
-                                      value={days}
-                                  />
-                              );
-                          })}
-                      </Accordion.Body>
-                  </Accordion.Item>
-              </Accordion>
+          {/* Duration */}
+          <Accordion.Item eventKey="1">
+            <Accordion.Header>Duration</Accordion.Header>
+            <Accordion.Body>
+              {Duration.map((dur, idx) => (
+                <Form.Check
+                  key={idx}
+                  type="checkbox"
+                  id={`dur-${idx}`}
+                  label={dur}
+                  value={dur}
+                  checked={selectedDurations.includes(dur)}
+                  onChange={() =>
+                    handleCheckboxChange(dur, selectedDurations, setSelectedDurations, "durations")
+                  }
+                />
+              ))}
+            </Accordion.Body>
+          </Accordion.Item>
 
-              <Accordion defaultActiveKey="0">
-                  <Accordion.Item eventKey="1">
-                      <Accordion.Header>Price </Accordion.Header>
-                      <Accordion.Body>
-                          <Form.Label>
-                              Price Range: ${minPrice} - ${maxPrice}
-                          </Form.Label>
+          {/* Price */}
+          <Accordion.Item eventKey="2">
+            <Accordion.Header>Price</Accordion.Header>
+            <Accordion.Body>
+              <Form.Label>
+                Price Range: ${minPrice} - ${maxPrice}
+              </Form.Label>
+              <div className="slider-container">
+                <input
+                  type="range"
+                  min="0"
+                  max="1000"
+                  value={minPrice}
+                  onChange={handleMinPriceChange}
+                  className="slider"
+                />
+                <input
+                  type="range"
+                  min="0"
+                  max="1000"
+                  value={maxPrice}
+                  onChange={handleMaxPriceChange}
+                  className="slider"
+                />
+                <div
+                  className="slider-track"
+                  style={{
+                    left: `${(minPrice / 1000) * 100}%`,
+                    right: `${100 - (maxPrice / 1000) * 100}%`,
+                  }}
+                />
+              </div>
+            </Accordion.Body>
+          </Accordion.Item>
 
-                          {/* Thanh kéo 2 chiều */}
-                          <div className="slider-container">
-                              <input
-                                  type="range"
-                                  min="0"
-                                  max="1000"
-                                  value={minPrice}
-                                  onChange={handleMinPriceChange}
-                                  className="slider"
-                                  id="minRange"
-                              />
-                              <input
-                                  type="range"
-                                  min="0"
-                                  max="1000"
-                                  value={maxPrice}
-                                  onChange={handleMaxPriceChange}
-                                  className="slider"
-                                  id="maxRange"
-                              />
-
-                              {/* Thanh màu hiển thị khoảng giá */}
-                              <div
-                                  className="slider-track"
-                                  style={{
-                                      left: `${(minPrice / 1000) * 100}%`,
-                                      right: `${
-                                          100 - (maxPrice / 1000) * 100
-                                      }%`,
-                                  }}
-                              />
-                          </div>
-                          {PriceRange.map((Price, inx) => {
-                              return (
-                                  <Form.Check
-                                      key={inx}
-                                      type="checkbox"
-                                      id={Price}
-                                      label={Price}
-                                      value={Price}
-                                  />
-                              );
-                          })}
-                      </Accordion.Body>
-                  </Accordion.Item>
-              </Accordion>
-
-              <Accordion defaultActiveKey="0">
-                  <Accordion.Item eventKey="1">
-                      <Accordion.Header>Rating </Accordion.Header>
-                      <Accordion.Body>
-                          {Ratings.map((rating, inx) => {
-                              return (
-                                  <Form.Check
-                                      key={inx}
-                                      type="checkbox"
-                                      id={rating}
-                                      label={rating}
-                                      value={rating}
-                                  />
-                              );
-                          })}
-                      </Accordion.Body>
-                  </Accordion.Item>
-              </Accordion>
-          </div>
+          {/* Ratings */}
+          <Accordion.Item eventKey="3">
+            <Accordion.Header>Rating</Accordion.Header>
+            <Accordion.Body>
+              {Ratings.map((rate, idx) => (
+                <Form.Check
+                  key={idx}
+                  type="checkbox"
+                  id={`rate-${idx}`}
+                  label={rate}
+                  value={rate}
+                  checked={selectedRatings.includes(rate)}
+                  onChange={() =>
+                    handleCheckboxChange(rate, selectedRatings, setSelectedRatings, "ratings")
+                  }
+                />
+              ))}
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
       </div>
+    </div>
   );
 };
 
