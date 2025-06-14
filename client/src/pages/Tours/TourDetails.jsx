@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -59,8 +58,7 @@ const TourDetails = () => {
   } = destination;
 
   const handleBookNow = () => {
-    // 👉 Điều hướng sang trang đặt tour hoặc xử lý sự kiện
-    navigate(`/book/${id}`);
+    navigate(`/booking/${id}`); // chuyển sang trang booking có id tour
   };
 
   return (
@@ -76,19 +74,37 @@ const TourDetails = () => {
             style={{ maxHeight: "400px", width: "100%", objectFit: "cover" }}
           />
 
-          <p><strong>Destination:</strong> {destinationName}, {country}</p>
-          <p><strong>Price:</strong> {afterDiscount && afterDiscount < price ? (
-            <>
-              <span className="text-muted text-decoration-line-through">${price.toFixed(2)}</span> {" "}
-              <span className="text-danger">${afterDiscount.toFixed(2)}</span>
-            </>
-          ) : (
-            <span>${price.toFixed(2)}</span>
-          )}</p>
-          <p><strong>Rating:</strong> {rating} ⭐ ({reviews} reviews)</p>
-          <p><strong>Days:</strong> {days || "N/A"}</p>
-          <p><strong>Start Date:</strong> {startDate ? new Date(startDate).toLocaleDateString() : "N/A"}</p>
-          <p><strong>Description:</strong> {description}</p>
+          <p>
+            <strong>Destination:</strong> {destinationName}, {country}
+          </p>
+          <p>
+            <strong>Price:</strong>{" "}
+            {afterDiscount && afterDiscount < price ? (
+              <>
+                <span className="text-muted text-decoration-line-through">
+                  ${price.toFixed(2)}
+                </span>{" "}
+                <span className="text-danger">
+                  ${afterDiscount.toFixed(2)}
+                </span>
+              </>
+            ) : (
+              <span>${price.toFixed(2)}</span>
+            )}
+          </p>
+          <p>
+            <strong>Rating:</strong> {rating} ⭐ ({reviews} reviews)
+          </p>
+          <p>
+            <strong>Days:</strong> {days || "N/A"}
+          </p>
+          <p>
+            <strong>Start Date:</strong>{" "}
+            {startDate ? new Date(startDate).toLocaleDateString() : "N/A"}
+          </p>
+          <p>
+            <strong>Description:</strong> {description}
+          </p>
 
           <div className="mt-4 text-center">
             <Button variant="primary" size="lg" onClick={handleBookNow}>
