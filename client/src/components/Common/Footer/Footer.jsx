@@ -19,9 +19,6 @@ const Footer = () => {
                   <NavLink to="/about-us"><p className=" ms-3 fs-6">About TravelSmart</p></NavLink>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <NavLink to="/news"><p className="ms-3 fs-6">News</p></NavLink>
-                </ListGroup.Item>
-                <ListGroup.Item>
                   <NavLink to="/"><p className="ms-3 fs-6">Reviews</p></NavLink>
                 </ListGroup.Item>
               </ListGroup>
@@ -70,10 +67,6 @@ const Footer = () => {
 
           <Row className="footer_bottom align-items-center">
             <Col md="4" sm="12" className="text-md-start mt-1 text-center footer_language_select_wrapper">
-              <select className="footer_language_select">
-                <option value="en">English</option>
-                <option value="vi">Vietnamese</option>
-              </select>
             </Col>
 
             <Col md="4" sm="12" className="text-center mt-1 copyright">

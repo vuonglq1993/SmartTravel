@@ -30,7 +30,7 @@ const Success = () => {
         if (!res.ok) throw new Error("Lỗi khi xác nhận thanh toán.");
         return res.json();
       })
-      .then((data) => {
+      .then(() => {
         localStorage.setItem(`executed-${paymentId}`, "done");
         setMessage("🎉 Thanh toán thành công! Cảm ơn bạn đã đặt tour.");
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
@@ -51,7 +51,11 @@ const Success = () => {
         </div>
         <h2>{error ? "Thanh toán thất bại" : "Thanh toán thành công"}</h2>
         <p>{error || message}</p>
-        {!error && <p className="sub">Cảm ơn bạn! Tour đã được ghi nhận. Hẹn gặp lại trên hành trình tiếp theo! ✈️</p>}
+        {!error && (
+          <p className="sub">
+            Cảm ơn bạn! Tour đã được ghi nhận. Hẹn gặp lại trên hành trình tiếp theo! ✈️
+          </p>
+        )}
       </div>
     </div>
   );

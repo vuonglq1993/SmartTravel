@@ -12,9 +12,9 @@ import TourDetails from "./pages/Tours/TourDetails";
 import Booking from "./pages/Booking/Booking";
 import TopPalces from "./pages/Destinations/Destinations";  
 import PhotoGallery from "./pages/PhotoGallery/PhotoGallery";
-import News from "./pages/News/News";
 import "react-datepicker/dist/react-datepicker.css";
 import Success from "./pages/Booking/Success";
+
 function App() {
   const [user, setUser] = useState(null);
 
@@ -34,6 +34,7 @@ function App() {
   }, [user]);
 
   return (
+
     <>
       <Header user={user} setUser={setUser} />
       <Routes>
@@ -46,11 +47,11 @@ function App() {
         <Route path="/booking/:id" element={<Booking />} />
         <Route path="/top-places" element={<TopPalces />} />
         <Route path="/gallery" element={<PhotoGallery />} />
-        <Route path="/news" element={<News />} />
         <Route path="/success" element={<Success />} />
       </Routes>
       <Footer />
     </>
+
   );
 }
 
