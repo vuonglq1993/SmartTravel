@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService1 {
 
     @Override
     public User getUserById(int id) {
-        Optional<User> optionalUser = userRepository.findById((long) id);
+        Optional<User> optionalUser = userRepository.findById((Integer) id);
         return optionalUser.orElse(null);
     }
 
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService1 {
 
     @Override
     public User updateUser(int id, User updatedUser) {
-        Optional<User> optionalUser = userRepository.findById((long) id);
+        Optional<User> optionalUser = userRepository.findById((Integer) id);
         if (optionalUser.isPresent()) {
             User existing = optionalUser.get();
             existing.setUsername(updatedUser.getUsername());
@@ -47,8 +47,8 @@ public class UserServiceImpl implements UserService1 {
 
     @Override
     public boolean deleteUser(int id) {
-        if (userRepository.existsById((long) id)) {
-            userRepository.deleteById((long) id);
+        if (userRepository.existsById((int) id)) {
+            userRepository.deleteById((int) id);
             return true;
         }
         return false;

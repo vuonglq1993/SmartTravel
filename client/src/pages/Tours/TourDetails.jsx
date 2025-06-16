@@ -71,167 +71,100 @@ const TourDetails = () => {
     };
   }, [id]);
 
-  if (!tourDetails) return <p>Loading...</p>;
 
-  const galleryImages = tourDetails.imageUrl
-    ? [{ original: tourDetails.imageUrl, thumbnail: tourDetails.imageUrl }]
-    : [];
+  if (loading) {
+    return (
+      <Container className="text-center mt-5">
+        <Spinner animation="border" variant="primary" />
+        <p className="mt-3">Loading tour details...</p>
+      </Container>
+    );
+  }
+
+  if (!tour) {
+    return (
+      <Container className="text-center mt-5">
+        <h4>Tour not found</h4>
+      </Container>
+    );
+  }
+
+  const {
+    title = "Untitled Tour",
+    price = 0,
+    afterDiscount,
+    rating = 0,
+    reviews = 0,
+    startDate,
+    days,
+    description = "No description available",
+    destination = {},
+  } = tour;
+
+  const {
+    name: destinationName = "Unknown destination",
+    country = "Unknown country",
+    imageUrl = "https://via.placeholder.com/800x400?text=No+Image",
+  } = destination;
+
+  const handleBookNow = () => {
+    navigate(`/booking/${id}`); // chuyển sang trang booking có id tour
+  };
 
   return (
-    <>
-      <Breadcrumbs
-        title={tourDetails.title}
-        pagename={<NavLink to="/tours">Tours</NavLink>}
-        childpagename={tourDetails.title}
-      />
+    <Container className="mt-5">
+      <Row>
+        <Col md={12}>
+          <h2 className="mb-3">{title}</h2>
 
-      <section className="tour_details py-5">
-        <Container>
-          <Row>
-            <h1 className="fs-2 font-bold mb-4">{tourDetails.title}</h1>
+          <img
+            src={imageUrl}
+            alt={destinationName}
+            className="img-fluid rounded mb-4"
+            style={{ maxHeight: "400px", width: "100%", objectFit: "cover" }}
+          />
 
-            <ImageGallery
-              items={galleryImages}
-              showNav={false}
-              showBullets={false}
-              showPlayButton={false}
-            />
+          <p>
+            <strong>Destination:</strong> {destinationName}, {country}
+          </p>
+          <p>
+            <strong>Price:</strong>{" "}
+            {afterDiscount && afterDiscount < price ? (
+              <>
+                <span className="text-muted text-decoration-line-through">
+                  ${price.toFixed(2)}
+                </span>{" "}
+                <span className="text-danger">
+                  ${afterDiscount.toFixed(2)}
+                </span>
+              </>
+            ) : (
+              <span>${price.toFixed(2)}</span>
+            )}
+          </p>
+          <p>
+            <strong>Rating:</strong> {rating} ⭐ ({reviews} reviews)
+          </p>
+          <p>
+            <strong>Days:</strong> {days || "N/A"}
+          </p>
+          <p>
+            <strong>Start Date:</strong>{" "}
+            {startDate ? new Date(startDate).toLocaleDateString() : "N/A"}
+          </p>
+          <p>
+            <strong>Description:</strong> {description}
+          </p>
 
-            <Tab.Container defaultActiveKey="1">
-              <Row className="py-5">
-                <Col md={8} className="mb-3 mb-md-0">
-                  <Nav variant="pills" className="flex-row nav_bars rounded-2">
-                    <Nav.Item>
-                      <Nav.Link eventKey="1">Overview</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link eventKey="2">Reviews</Nav.Link>
-                    </Nav.Item>
-                  </Nav>
+          <div className="mt-4 text-center">
+            <Button variant="primary" size="lg" onClick={handleBookNow}>
+              Book Now
+            </Button>
+          </div>
+        </Col>
+      </Row>
+    </Container>
 
-                  <Tab.Content className="mt-4">
-                    <Tab.Pane eventKey="1">
-                      <div className="tour_details">
-                        <h1 className="font-bold mb-2 h3 border-bottom pb-2">Overview</h1>
-                        <p className="body-text">{tourDetails.description}</p>
-
-                        <h5 className="font-bold mb-2 h5 mt-3">Tour Info</h5>
-                        <ListGroup>
-                          <ListGroup.Item className="border-0 pt-0 body-text">
-                            Start Date: {new Date(tourDetails.startDate).toLocaleDateString()}
-                          </ListGroup.Item>
-                          <ListGroup.Item className="border-0 pt-0 body-text">
-                            End Date: {new Date(tourDetails.endDate).toLocaleDateString()}
-                          </ListGroup.Item>
-                          <ListGroup.Item className="border-0 pt-0 body-text">
-                            Capacity: {tourDetails.capacity}
-                          </ListGroup.Item>
-                        </ListGroup>
-
-                        <h5 className="font-bold mb-2 h5 mt-3">Destination</h5>
-                        <p><strong>{tourDetails.destination.name.trim()}</strong> - {tourDetails.destination.country}</p>
-                        <p>{tourDetails.destination.description}</p>
-                        <img src={tourDetails.destination.imageUrl} alt={tourDetails.destination.name.trim()} className="img-fluid rounded" />
-                      </div>
-                    </Tab.Pane>
-
-                    <Tab.Pane eventKey="2">
-                      <Row>
-                        <h1 className="h3 mb-2">Post your own review</h1>
-                        <form onSubmit={handleCommentSubmit} className="border rounded">
-                          <div className="mb-3">
-                            <label htmlFor="rating" className="form-label">Rating (1-5)</label>
-                            <input
-                              type="number"
-                              id="rating"
-                              className="form-control"
-                              value={rating}
-                              onChange={(e) => setRating(parseInt(e.target.value))}
-                              min="1"
-                              max="5"
-                              required
-                              placeholder="Enter rating"
-                            />
-                          </div>
-
-                          <div className="mb-3">
-                            <label htmlFor="comment" className="form-label">Comment</label>
-                            <textarea
-                              id="comment"
-                              className="form-control"
-                              rows="3"
-                              value={comment}
-                              onChange={(e) => setComment(e.target.value)}
-                              required
-                              placeholder="Write your review here..."
-                            ></textarea>
-                          </div>
-
-                          <button type="submit" className="btn btn-primary mb-3">Submit</button>
-                        </form>
-
-                        <div className="mt-4">
-                          <h2 className="h5 mb-3">Other Reviews</h2>
-                          {comments.map((review, index) => (
-                            <div key={index} className="border rounded p-3 mb-2">
-                              <strong>Rating:</strong> {review.rating}/5
-                              <p className="mb-0">{review.comment}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </Row>
-                    </Tab.Pane>
-                  </Tab.Content>
-                </Col>
-
-                <Col md={4}>
-                  <aside>
-                    <Card className="rounded-3 p-2 shadow-sm mb-4 price-info">
-                      <Card.Body>
-                        <Stack gap={2} direction="horizontal">
-                          <h1 className="font-bold mb-0 h2">${tourDetails.price}</h1>
-                          <span className="fs-4"> /person</span>
-                        </Stack>
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                          <ListGroup horizontal>
-                            <ListGroup.Item className="border-0 me-2 fw-bold">
-                              {tourDetails.averageRating}
-                            </ListGroup.Item>
-                            <ListGroup.Item className="border-0 me-1 text-warning">
-                              <i className="bi bi-star-fill"></i>
-                            </ListGroup.Item>
-                            <ListGroup.Item className="border-0 me-1 text-warning">
-                              <i className="bi bi-star-fill"></i>
-                            </ListGroup.Item>
-                            <ListGroup.Item className="border-0 me-1 text-warning">
-                              <i className="bi bi-star-fill"></i>
-                            </ListGroup.Item>
-                            <ListGroup.Item className="border-0 me-1 text-warning">
-                              <i className="bi bi-star-fill"></i>
-                            </ListGroup.Item>
-                            <ListGroup.Item className="border-0 me-1 text-warning">
-                              <i className="bi bi-star-half"></i>
-                            </ListGroup.Item>
-                          </ListGroup>
-                          <h5 className="h6">({tourDetails.reviewCount})</h5>
-                        </div>
-
-                        <NavLink
-                          to="/booking"
-                          className="primaryBtn w-100 d-flex justify-content-center fw-bold"
-                        >
-                          Book Now
-                        </NavLink>
-                      </Card.Body>
-                    </Card>
-                  </aside>
-                </Col>
-              </Row>
-            </Tab.Container>
-          </Row>
-        </Container>
-      </section>
-    </>
   );
 };
 

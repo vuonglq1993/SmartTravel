@@ -1,10 +1,15 @@
 package com.smarttravel.server.service.booking;
 
 import com.smarttravel.server.model.Booking;
+import com.smarttravel.server.model.Tour;
+import com.smarttravel.server.model.User;
 import com.smarttravel.server.repository.BookingRepository;
+import com.smarttravel.server.repository.TourRepository;
+import com.smarttravel.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +18,12 @@ public class BookingServiceImpl implements BookingService {
 
     @Autowired
     private BookingRepository bookingRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private TourRepository tourRepository;
 
     @Override
     public List<Booking> getAllBookings() {
@@ -26,6 +37,22 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Booking createBooking(Booking booking) {
+        // Lấy user và tour từ ID
+        int userId = booking.getUser().getId();
+        int tourId = booking.getTour().getId();
+
+        Optional<User> userOpt = userRepository.findById(userId);
+        Optional<Tour> tourOpt = tourRepository.findById(tourId);
+
+        if (userOpt.isEmpty() || tourOpt.isEmpty()) {
+            throw new RuntimeException("User hoặc Tour không tồn tại");
+        }
+
+        booking.setUser(userOpt.get());
+        booking.setTour(tourOpt.get());
+        booking.setBookingDate(LocalDateTime.now());
+        booking.setStatus("Pending");
+
         return bookingRepository.save(booking);
     }
 

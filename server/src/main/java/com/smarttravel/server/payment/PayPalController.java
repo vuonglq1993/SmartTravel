@@ -31,7 +31,7 @@ public class PayPalController {
         }
 
         Booking booking = bookingOptional.get();
-        String total = String.format("%.2f", (double) booking.getTotalPrice()); // chuyển thành chuỗi tiền tệ PayPal
+        String total = String.format("%.2f", (double) booking.getTotalPrice());
 
         Amount amount = new Amount();
         amount.setCurrency("USD");
@@ -60,6 +60,7 @@ public class PayPalController {
             Payment created = payment.create(apiContext);
             return ResponseEntity.ok(created.getLinks());
         } catch (PayPalRESTException e) {
+            e.printStackTrace();
             return ResponseEntity.status(500).body("Lỗi khi tạo thanh toán: " + e.getMessage());
         }
     }
@@ -67,6 +68,10 @@ public class PayPalController {
     @GetMapping("/execute")
     public ResponseEntity<?> executePayment(@RequestParam("paymentId") String paymentId,
                                             @RequestParam("PayerID") String payerId) {
+        System.out.println("Đang thực hiện thanh toán với:");
+        System.out.println("paymentId = " + paymentId);
+        System.out.println("payerId = " + payerId);
+
         Payment payment = new Payment();
         payment.setId(paymentId);
 
@@ -74,12 +79,24 @@ public class PayPalController {
         paymentExecute.setPayerId(payerId);
 
         try {
-            Payment executed = payment.execute(apiContext, paymentExecute);
-            return ResponseEntity.ok(executed);
-        } catch (PayPalRESTException e) {
-            return ResponseEntity.status(500).body("Lỗi khi thực hiện thanh toán: " + e.getMessage());
-        }
+    Payment executed = payment.execute(apiContext, paymentExecute);
+    return ResponseEntity.ok(executed);
+} catch (PayPalRESTException e) {
+    e.printStackTrace();
+    String message = e.getMessage();
+
+    // fallback check nếu SDK không expose chi tiết
+    if (message != null && message.contains("PAYMENT_ALREADY_DONE")) {
+        return ResponseEntity.ok(Map.of(
+            "status", "already_done",
+            "message", "Thanh toán đã được xử lý tự động từ trước."
+        ));
+    }
+
+    return ResponseEntity.status(500).body(Map.of(
+        "status", "fail",
+        "message", message != null ? message : "Lỗi không xác định từ PayPal."
+    ));
+}
     }
 }
-
-

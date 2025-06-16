@@ -41,31 +41,32 @@ public class UserService {
     }
 
     public ResultUser loginUser(UserDTO userDTO) {
-        ResultUser resultUser = new ResultUser();
+    ResultUser resultUser = new ResultUser();
 
-        Optional<User> existingUser = userRepository.findByUsername(userDTO.getUsername());
+    Optional<User> existingUser = userRepository.findByEmail(userDTO.getEmail());
 
-        if (existingUser.isPresent()) {
-            String hashedPassword = PasswordEncryptor.encryptPasswordMD5(userDTO.getPassword());
-            String storedPassword = existingUser.get().getPassword();
+    if (existingUser.isPresent()) {
+        String hashedPassword = PasswordEncryptor.encryptPasswordMD5(userDTO.getPassword());
+        String storedPassword = existingUser.get().getPassword();
 
-            if (hashedPassword.equals(storedPassword)) {
-                // Đăng nhập thành công
-                User loggedInUser = new User();
-                loggedInUser.setId(existingUser.get().getId());
-                loggedInUser.setUsername(existingUser.get().getUsername());
+        if (hashedPassword.equals(storedPassword)) {
+            // Đăng nhập thành công
+            User loggedInUser = new User();
+            loggedInUser.setId(existingUser.get().getId());
+            loggedInUser.setUsername(existingUser.get().getUsername());
+            loggedInUser.setEmail(existingUser.get().getEmail());
 
-                resultUser.setResult(true);
-                resultUser.setData(loggedInUser);
-                return resultUser;
-            }
+            resultUser.setResult(true);
+            resultUser.setData(loggedInUser);
+            return resultUser;
         }
-
-        // Sai tài khoản hoặc mật khẩu
-        resultUser.setResult(false);
-        resultUser.setData(null);
-        return resultUser;
     }
+
+    // Sai tài khoản hoặc mật khẩu
+    resultUser.setResult(false);
+    resultUser.setData(null);
+    return resultUser;
+}
 
     public boolean checkEmailExists(String email) {
         return userRepository.existsByEmail(email);
