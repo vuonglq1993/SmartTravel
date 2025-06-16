@@ -6,6 +6,12 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import "../Booking/booking.css";
 
+
+const getToday = () => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // reset về 00:00:00
+  return today;
+};
 const Booking = () => {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
@@ -15,11 +21,11 @@ const Booking = () => {
     const { id } = useParams();
 
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
-    }, []);
+  const storedUser = localStorage.getItem("user");
+  if (storedUser) {
+    setUser(JSON.parse(storedUser));
+  }
+}, []);
 
     useEffect(() => {
         if (id) {
@@ -31,31 +37,43 @@ const Booking = () => {
     }, [id]);
 
     const handleSubmit = async () => {
-        if (!user || !tour) return;
+    if (!user || !tour) return;
 
-        const bookingData = {
-            bookingDate: new Date().toISOString(),
-            startDate: startDate.toISOString().split("T")[0],
-            endDate: endDate.toISOString().split("T")[0],
-            quantity: 1,
-            totalPrice: (tour.afterDiscount || tour.price || 0) + 100,
-            status: "Pending",
-            user: {
-                id: user.id,
-            },
-            tour: {
-                id: tour.id,
-            },
-        };
-
-        try {
-            await axios.post("http://localhost:8080/api/admin/bookings", bookingData);
-            setShowPopup(true);
-            setTimeout(() => window.location.href = "/", 3000);
-        } catch (error) {
-            console.error("Booking failed:", error);
+    const bookingData = {
+        bookingDate: new Date().toISOString().slice(0, 19),
+        startDate: startDate.toISOString().split("T")[0],
+        endDate: endDate.toISOString().split("T")[0],
+        quantity: 1,
+        totalPrice: (tour.afterDiscount || tour.price || 0) + 100,
+        status: "PENDING", // CHÍNH XÁC ENUM NHÉ
+        user: {
+            id: user.id
+        },
+        tour: {
+            id: tour.id
         }
     };
+
+    try {
+        console.log("Sending booking:", bookingData);
+        const bookingRes = await axios.post("http://localhost:8080/api/admin/bookings", bookingData);
+        const booking = bookingRes.data;
+
+        const paypalRes = await axios.post("http://localhost:8080/api/paypal/pay", null, {
+            params: { bookingId: booking.id }
+        });
+
+        const approvalLink = paypalRes.data.find(link => link.rel === "approval_url");
+        if (approvalLink) {
+            window.location.href = approvalLink.href;
+        } else {
+            throw new Error("approval_url not found in PayPal response.");
+        }
+    } catch (error) {
+        console.error("Payment process failed:", error.response?.data || error);
+        alert("Lỗi khi xử lý thanh toán: " + (error.response?.data?.message || error.message));
+    }
+};
 
     const handleClosePopup = () => {
         setShowPopup(false);
@@ -87,7 +105,7 @@ const Booking = () => {
                                                 required
                                                 type="text"
                                                 placeholder="Username"
-                                                defaultValue={user?.username || ""}
+                                                value={user?.username || ""}
                                                 readOnly
                                             />
                                         </Form.Group>
@@ -130,14 +148,21 @@ const Booking = () => {
                                         >
                                             <Form.Label className="d-block">Check In</Form.Label>
                                             <DatePicker
-                                                selected={startDate}
-                                                onChange={(date) => setStartDate(date)}
-                                                selectsStart
-                                                startDate={startDate}
-                                                endDate={endDate}
-                                                className="form-control w-100"
-                                                dateFormat="dd, MMMM, yyyy"
-                                            />
+  selected={startDate}
+  onChange={(date) => {
+    setStartDate(date);
+    if (date > endDate) setEndDate(date);
+  }}
+  selectsStart
+  startDate={startDate}
+  endDate={endDate}
+  className="form-control w-100"
+  dateFormat="dd, MMMM, yyyy"
+  minDate={getToday()} // dùng hàm này thay vì new Date()
+  portalId="root-portal"
+  popperPlacement="bottom-start"
+/>
+
                                         </Form.Group>
 
                                         <Form.Group
@@ -148,14 +173,15 @@ const Booking = () => {
                                         >
                                             <Form.Label className="d-block">Check Out</Form.Label>
                                             <DatePicker
-                                                selected={endDate}
-                                                onChange={(date) => setEndDate(date)}
-                                                selectsEnd
-                                                startDate={startDate}
-                                                endDate={endDate}
-                                                className="form-control w-100"
-                                                dateFormat="dd, MMMM, yyyy"
-                                            />
+  selected={endDate}
+  onChange={(date) => setEndDate(date)}
+  selectsEnd
+  startDate={startDate}
+  endDate={endDate}
+  className="form-control w-100"
+  dateFormat="dd, MMMM, yyyy"
+  minDate={startDate} // 👈 Thêm dòng này để giới hạn ngày kết thúc
+/>
                                         </Form.Group>
                                     </Row>
                                 </Form>

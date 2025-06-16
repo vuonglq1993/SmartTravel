@@ -1,9 +1,10 @@
+// ✅ FIXED LoginModal component
 import React, { useState } from "react";
 import "./Login.css";
 import logo from "../../assets/images/logo/logo co màu.png";
 import axios from "axios";
 
-const LoginModal = ({ isOpen, toggle, setUser, user }) => {
+const LoginModal = ({ isOpen, toggle, setUser }) => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [emailCheckResult, setEmailCheckResult] = useState("");
@@ -65,10 +66,9 @@ const LoginModal = ({ isOpen, toggle, setUser, user }) => {
 
       const response = await axios.post(url, payload);
 
-      setUser(response.data.user || {
-        email: formData.email,
-        username: formData.username,
-      });
+      const userData = isLoginMode ? response.data.data : response.data;
+      localStorage.setItem("user", JSON.stringify(userData));
+      setUser(userData);
 
       setShowSuccessPopup(true);
       setTimeout(() => {
@@ -93,110 +93,103 @@ const LoginModal = ({ isOpen, toggle, setUser, user }) => {
 
         <div className="text-center mb-4 mt-4">
           <img src={logo} alt="Logo" className="modal-logo" style={{ maxWidth: "50%" }} />
-          <p className="fs-3 fw-bold">{user ? "WELCOME!" : isLoginMode ? "LOGIN FORM" : "REGISTER FORM"}</p>
+          <p className="fs-3 fw-bold">{isLoginMode ? "LOGIN FORM" : "REGISTER FORM"}</p>
         </div>
 
-        {user ? (
-          <div className="text-center">
-            <p className="fs-5">Hello, <strong>{user.username || user.email}</strong>!</p>
-            <button className="btn btn-danger mt-3" onClick={handleLogout}>Logout</button>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit}>
-            {!isLoginMode && (
-              <div className="form-group">
-                <label htmlFor="username">Username</label>
-                <input
-                  type="text"
-                  id="username"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  placeholder="Enter your username"
-                  required
-                />
-              </div>
-            )}
-
+        <form onSubmit={handleSubmit}>
+          {!isLoginMode && (
             <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <div className="d-flex align-items-center">
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Enter your email"
-                  required
-                  style={{ flex: 2, marginRight: "10px" }}
-                />
-                {!isLoginMode && (
-                  <button
-                    type="button"
-                    className="btn pb-2 pt-2 mb-1 btn-secondary btn-sm"
-                    onClick={handleEmailCheck}
-                    style={{ whiteSpace: "nowrap", flex: 1 }}
-                  >
-                    Check Email
-                  </button>
-                )}
-              </div>
-              {!isLoginMode && emailCheckResult && (
-                <small className={emailCheckResult.includes("available") ? "text-success" : "text-danger"}>
-                  {emailCheckResult}
-                </small>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="username">Username</label>
               <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
+                type="text"
+                id="username"
+                name="username"
+                value={formData.username}
                 onChange={handleChange}
-                placeholder="Enter password"
+                placeholder="Enter your username"
                 required
               />
             </div>
+          )}
 
-            {!isLoginMode && (
-              <div className="form-group">
-                <label htmlFor="confirmPassword">Confirm Password</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="Confirm password"
-                  required
-                />
-              </div>
-            )}
-
-            <div className="text-center mt-3">
-              <button type="submit" className="sub-mit-btn">
-                {isLoginMode ? "Login" : "Register"}
-              </button>
-            </div>
-
-            <div className="text-center mt-3">
-              <span>
-                {isLoginMode ? "Don't have an account?" : "Already have an account?"}{" "}
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <div className="d-flex align-items-center">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                required
+                style={{ flex: 2, marginRight: "10px" }}
+              />
+              {!isLoginMode && (
                 <button
                   type="button"
-                  className="btn btn-link p-0"
-                  onClick={() => setIsLoginMode(!isLoginMode)}
+                  className="btn pb-2 pt-2 mb-1 btn-secondary btn-sm"
+                  onClick={handleEmailCheck}
+                  style={{ whiteSpace: "nowrap", flex: 1 }}
                 >
-                  {isLoginMode ? "Register here" : "Login here"}
+                  Check Email
                 </button>
-              </span>
+              )}
             </div>
-          </form>
-        )}
+            {!isLoginMode && emailCheckResult && (
+              <small className={emailCheckResult.includes("available") ? "text-success" : "text-danger"}>
+                {emailCheckResult}
+              </small>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Enter password"
+              required
+            />
+          </div>
+
+          {!isLoginMode && (
+            <div className="form-group">
+              <label htmlFor="confirmPassword">Confirm Password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Confirm password"
+                required
+              />
+            </div>
+          )}
+
+          <div className="text-center mt-3">
+            <button type="submit" className="sub-mit-btn">
+              {isLoginMode ? "Login" : "Register"}
+            </button>
+          </div>
+
+          <div className="text-center mt-3">
+            <span>
+              {isLoginMode ? "Don't have an account?" : "Already have an account?"} {" "}
+              <button
+                type="button"
+                className="btn btn-link p-0"
+                onClick={() => setIsLoginMode(!isLoginMode)}
+              >
+                {isLoginMode ? "Register here" : "Login here"}
+              </button>
+            </span>
+          </div>
+        </form>
 
         {showSuccessPopup && (
           <div className="success-popup">

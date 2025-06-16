@@ -52,3 +52,7 @@
 .popup .close-btn:hover {
     background-color: darkred;
 }
+
+.react-datepicker-popper {
+  z-index: 9999 !important;
+}
