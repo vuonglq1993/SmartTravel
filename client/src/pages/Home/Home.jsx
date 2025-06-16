@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Banner from "../../components/Banner/Banner";
-import AdvanceSearch from "../../components/AdvanceSearch/AdvanceSearch";
 import Features from "../../components/Features/Features";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -10,7 +9,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./home.css";
 import Footerapp from "../../assets/images/footerapp/footerapp.png";
-import Gallery from "../../components/Gallery/Gallery";
 import Cards from "../../components/Cards/Cards";
 import { destinationsData } from "../../utils/data";  // vẫn dùng data giả cho Top places
 import PopularCard from "../../components/Cards/PopularCard";
@@ -182,24 +180,8 @@ const Home = () => {
         <div className="overlay"></div>
       </section>
 
-      <section className="gallery">
-        <Container>
-          <Row>
-            <Col md="12">
-              <div className="main_heading">
-                <p className="fs-2 text-uppercase"> experience</p>
-              </div>
-            </Col>
-          </Row>
-          <Row>
-            <Col md="12">
-              <Gallery />
-            </Col>
-          </Row>
-        </Container>
-      </section>
 
-      <section className="download">
+      <section className="download mt-5">
         <Container>
           <Row className="align-items-center mb-5">
             <Col md="6">
