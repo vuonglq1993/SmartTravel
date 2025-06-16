@@ -1,57 +1,23 @@
-import React from 'react'
-import Lightbox from "yet-another-react-lightbox";
-import GalleryImg1 from "../../assets/images/gallery/g1.jpg"
-import GalleryImg3 from "../../assets/images/gallery/g3.jpg"
-import GalleryImg4 from "../../assets/images/gallery/g4.jpg"
-import GalleryImg6 from "../../assets/images/gallery/g6.jpg"
-import GalleryImg7 from "../../assets/images/gallery/g7.jpg"
+import React from "react";
+import { Row, Col, Image } from "react-bootstrap";
 
+const Gallery = ({ images }) => {
+  if (!images || images.length === 0) return <p>No images to display.</p>;
 
-const Gallery = () => {
+  return (
+    <Row>
+      {images.map((img, index) => (
+        <Col key={index} xs={12} sm={6} md={4} lg={3} className="mb-4">
+          <Image
+            src={img.url}
+            alt={`Gallery image ${index}`}
+            thumbnail
+            fluid
+          />
+        </Col>
+      ))}
+    </Row>
+  );
+};
 
-    var images = [
-        {
-            src: GalleryImg1,
-            desc: "Person wearing shoes",
-            sub: "Gift Habeshaw"
-        },
-        {
-            src: GalleryImg3,
-            desc: "Blonde woman wearing sunglasses smiling at the camera ",
-            sub: "Dmitriy Frantsev"
-        },
-        {
-            src: GalleryImg6,
-            sub: "Harry Cunningham"
-        },
-        {
-            src: GalleryImg4,
-            desc: "Jaipur , Rajasthan India",
-            sub: "Liam Baldock"
-        },
-        {
-            src: GalleryImg7,
-            sub: "Verne Ho"
-        },
-        {
-            src: GalleryImg6,
-            desc: "Rann of kutch , India",
-            sub: "Hari Nandakumar"
-        },
-    ];
-
-    var settings = {
-        columnCount: {
-            default: 3,
-            mobile: 2,
-            tab: 3
-        },
-        mode: "dark",
-        enableZoom:false,
-    };
-    return (
-        <Lightbox images={images} settings={settings} />
-   );
-}
-
-export default Gallery
+export default Gallery;

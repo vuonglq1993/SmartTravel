@@ -11,8 +11,6 @@ import TourDetails from "./pages/Tours/TourDetails";
 import Booking from "./pages/Booking/Booking";
 import TopPalces from "./pages/Destinations/Destinations";  
 import PhotoGallery from "./pages/PhotoGallery/PhotoGallery";
-import News from "./pages/News/News";
-
 function App() {
   return (
       <>
@@ -27,7 +25,6 @@ function App() {
               <Route path="/booking" element={<Booking />} />
               <Route path="/top-places" element={<TopPalces />} />
               <Route path="/gallery" element={<PhotoGallery />} />
-              <Route path="/News" element={<News />} />
             </Routes>
           <Footer />
       </>
