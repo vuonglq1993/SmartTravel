@@ -80,7 +80,12 @@ public class PayPalController {
 
         try {
     Payment executed = payment.execute(apiContext, paymentExecute);
-    return ResponseEntity.ok(executed);
+    return ResponseEntity.ok(Map.of(
+    "status", "success",
+    "paymentId", executed.getId(),
+    "state", executed.getState(),
+    "amount", executed.getTransactions().get(0).getAmount().getTotal()
+));
 } catch (PayPalRESTException e) {
     e.printStackTrace();
     String message = e.getMessage();

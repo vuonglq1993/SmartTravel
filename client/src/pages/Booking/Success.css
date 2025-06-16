@@ -1,0 +1,64 @@
+.sky-bg {
+  height: 100vh;
+  background: linear-gradient(to bottom, #aee1f9 0%, #fefefe 100%);
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+}
+
+.sky-bg .success-card {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 16px;
+  padding: 3rem;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  animation: floatUp 0.8s ease forwards;
+  border: 1px solid #e0f7fa;
+}
+
+.sky-bg .checkmark-circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sky-bg .checkmark-circle svg {
+  display: block;
+  margin: 0 auto;
+  stroke: #4caf50;
+  stroke-width: 3;
+  fill: none;
+  width: 80px;
+  height: 110px;
+  overflow: visible;
+}
+.sky-bg .checkmark-circle .check {
+  fill: none;
+  stroke: #4caf50;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.sky-bg h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  color: #2c7a7b;
+}
+
+.sky-bg p {
+  font-size: 1.1rem;
+  margin: 0.3rem 0;
+  color: #333;
+}
+
+.sky-bg .sub {
+  font-size: 0.95rem;
+  color: #666;
+  margin-top: 1rem;
+}

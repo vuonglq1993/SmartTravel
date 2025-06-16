@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "canvas-confetti": "^1.9.3",
+    "react-bootstrap-icons": "^1.11.6",
+    "react-datepicker": "^8.4.0"
+  }
+}
