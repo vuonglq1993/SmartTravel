@@ -15,5 +15,6 @@ com/smarttravel/server/repository/UserRepository.class
 com/smarttravel/server/model/Tour.class
 com/smarttravel/server/dto/UserDTO.class
 com/smarttravel/server/controller/TourController.class
+com/smarttravel/server/controller/ImageController.class
 com/smarttravel/server/service/TourService.class
 com/smarttravel/server/exception/ValidationExceptionHandler.class

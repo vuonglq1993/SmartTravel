@@ -4,6 +4,7 @@
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/controller/ContactMessageController.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/controller/DestinationAdminController.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/controller/EmailController.java
+/Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/controller/ImageController.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/controller/ReviewAdminController.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/controller/TourAdminController.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/controller/TourController.java
@@ -21,6 +22,8 @@
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/model/Review.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/model/Tour.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/model/User.java
+/Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/payment/PayPalConfig.java
+/Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/payment/PayPalController.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/repository/BookingRepository.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/repository/ContactMessageRepository.java
 /Users/macos/Desktop/SmartTravel/server/src/main/java/com/smarttravel/server/repository/DestinationRepository.java

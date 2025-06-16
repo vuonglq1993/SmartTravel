@@ -21,13 +21,13 @@ const PopularCard = ({ val }) => {
   const country = destination.country || "Unknown country";
   const destinationName = destination.name || "Unknown destination";
   const imageUrl = destination.imageUrl || "https://i.postimg.cc/02pXsCdq/Ulun-Danu-Beratan-Temple.png";
-  
+
   // Nếu category là string, tách thành mảng
   const categories = Array.isArray(category)
     ? category
     : typeof category === "string"
-    ? category.split(",").map((c) => c.trim())
-    : [];
+      ? category.split(",").map((c) => c.trim())
+      : [];
 
   return (
     <Card className="rounded-2 shadow-sm popular">
@@ -39,14 +39,14 @@ const PopularCard = ({ val }) => {
       />
       <Card.Body>
         <Card.Text>
-          <i className="bi bi-geo-alt"></i>
+
           <span className="text ms-1">{destinationName}, {country}</span>
         </Card.Text>
 
         <Card.Title>
           <NavLink
             className="body-text text-dark text-decoration-none"
-            to={`/tours/${id}`} 
+            to={`/tours/${id}`}
           >
             {title}
           </NavLink>
@@ -56,8 +56,6 @@ const PopularCard = ({ val }) => {
           <i className="bi bi-star-fill me-1 text-warning"></i>
           {rating} <span className="text-muted">({reviews} reviews)</span>
         </p>
-
-        {/* Hiển thị danh sách category dưới dạng badge */}
         {categories.map((cat, index) => (
           <span
             key={index}

@@ -1,26 +1,76 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs";
+import "../Tours/tour.css";
+import { NavLink, useParams } from "react-router-dom";
+import ImageGallery from "react-image-gallery";
 import axios from "axios";
-import { Container, Row, Col, Spinner, Button } from "react-bootstrap";
+
+import {
+  Container,
+  Row,
+  Nav,
+  Col,
+  Tab,
+  ListGroup,
+  Card,
+  Stack,
+} from "react-bootstrap";
 
 const TourDetails = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const [tour, setTour] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [tourDetails, setTourDetails] = useState(null);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState([]);
+
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    if (rating && comment) {
+      const newReview = {
+        rating,
+        comment,
+        tour: { id: parseInt(id) },
+        user: { id: 1 }, // replace with actual logged-in user ID
+      };
+
+      try {
+        const response = await axios.post("/api/admin/reviews", newReview);
+        setComments([...comments, response.data]);
+        setRating(0);
+        setComment("");
+      } catch (error) {
+        console.error("Failed to post review:", error);
+        alert("Failed to post review. Please try again later.");
+      }
+    } else {
+      alert("Please enter rating and comment.");
+    }
+  };
 
   useEffect(() => {
+    document.title = "Tours Details";
+    window.scrollTo(0, 0);
+
     axios
-      .get(`http://localhost:8080/api/tours/${id}`)
-      .then((res) => {
-        setTour(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching tour:", err);
-        setLoading(false);
-      });
+      .get(`/api/tours/${id}`)
+      .then((res) => setTourDetails(res.data))
+      .catch((err) => console.error("Error fetching tour details:", err));
+
+    axios
+      .get(`/api/admin/reviews`)
+      .then((res) => setComments(res.data.filter((r) => r.tour.id == id)))
+      .catch((err) => console.error("Error fetching reviews:", err));
+
+    const script = document.createElement("script");
+    script.src = "//www.instagram.com/embed.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
   }, [id]);
+
 
   if (loading) {
     return (
@@ -114,6 +164,7 @@ const TourDetails = () => {
         </Col>
       </Row>
     </Container>
+
   );
 };
 
