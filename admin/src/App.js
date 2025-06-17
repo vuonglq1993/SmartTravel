@@ -1,3 +1,4 @@
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AdminDashboard from "./pages/AdminDashboard";
 import UserManagement from "./pages/UserManagement";
@@ -6,71 +7,94 @@ import BookingManagement from "./pages/BookingManagement";
 import StateManagement from "./pages/StateManagement";
 import ReviewManagement from "./pages/ReviewManagement";
 import Notifications from "./pages/Notifications";
-import AdminLayout from "./layouts/AdminLayout";
 import EmailForm from "./pages/EmailForm";
+import AdminLayout from "./layouts/AdminLayout";
+import Login from "./pages/LoginAdmin"; // <- chính là file Login bạn vừa gửi
+import PrivateRoute from "./routes/PrivateRoute";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route
-          path="/admin/dashboard"
-          element={
-            <AdminLayout>
-              <AdminDashboard />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/users"
-          element={
-            <AdminLayout>
-              <UserManagement />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/tours"
-          element={
-            <AdminLayout>
-              <TourManagement />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/bookings"
-          element={
-            <AdminLayout>
-              <BookingManagement />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/state"
-          element={
-            <AdminLayout>
-              <StateManagement />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/reviews"
-          element={
-            <AdminLayout>
-              <ReviewManagement />
-            </AdminLayout>
-          }
-        />
-        <Route
-          path="/admin/notifications"
-          element={
-            <AdminLayout>
-              <EmailForm />
-            </AdminLayout>
-          }
-        />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* Route login admin */}
+          <Route path="/login" element={<Login />} />
+
+          {/* Các route admin được bảo vệ */}
+          <Route
+            path="/admin/dashboard"
+            element={
+              <PrivateRoute>
+                <AdminLayout>
+                  <AdminDashboard />
+                </AdminLayout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <PrivateRoute>
+                <AdminLayout>
+                  <UserManagement />
+                </AdminLayout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/tours"
+            element={
+              <PrivateRoute>
+                <AdminLayout>
+                  <TourManagement />
+                </AdminLayout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/bookings"
+            element={
+              <PrivateRoute>
+                <AdminLayout>
+                  <BookingManagement />
+                </AdminLayout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/state"
+            element={
+              <PrivateRoute>
+                <AdminLayout>
+                  <StateManagement />
+                </AdminLayout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/reviews"
+            element={
+              <PrivateRoute>
+                <AdminLayout>
+                  <ReviewManagement />
+                </AdminLayout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/notifications"
+            element={
+              <PrivateRoute>
+                <AdminLayout>
+                  <EmailForm />
+                </AdminLayout>
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
