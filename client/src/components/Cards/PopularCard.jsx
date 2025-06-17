@@ -22,24 +22,40 @@ const PopularCard = ({ val }) => {
   const destinationName = destination.name || "Unknown destination";
   const imageUrl = destination.imageUrl || "https://i.postimg.cc/02pXsCdq/Ulun-Danu-Beratan-Temple.png";
 
-  // Nếu category là string, tách thành mảng
   const categories = Array.isArray(category)
     ? category
     : typeof category === "string"
       ? category.split(",").map((c) => c.trim())
       : [];
 
+  const renderStars = (rating) => {
+    const full = Math.floor(rating);
+    const half = rating % 1 >= 0.5;
+    const empty = 5 - full - (half ? 1 : 0);
+
+    const stars = [];
+    for (let i = 0; i < full; i++) {
+      stars.push(<i key={`full-${i}`} className="bi bi-star-fill text-warning"></i>);
+    }
+    if (half) {
+      stars.push(<i key="half" className="bi bi-star-half text-warning"></i>);
+    }
+    for (let i = 0; i < empty; i++) {
+      stars.push(<i key={`empty-${i}`} className="bi bi-star text-warning"></i>);
+    }
+    return stars;
+  };
+
   return (
-    <Card className="rounded-2 shadow-sm popular">
+    <Card className="rounded-2 shadow-sm popular h-100 d-flex flex-column">
       <Card.Img
         variant="top"
         src={imageUrl}
         className="img-fluid"
         alt="Tour Image"
       />
-      <Card.Body>
+      <Card.Body className="flex-grow-1 d-flex flex-column">
         <Card.Text>
-
           <span className="text ms-1">{destinationName}, {country}</span>
         </Card.Text>
 
@@ -52,18 +68,20 @@ const PopularCard = ({ val }) => {
           </NavLink>
         </Card.Title>
 
-        <p className="reviwe">
-          <i className="bi bi-star-fill me-1 text-warning"></i>
-          {rating} <span className="text-muted">({reviews} reviews)</span>
+        <p className="reviwe mb-2">
+          {renderStars(rating)} <span className="text-muted ms-1">({reviews} reviews)</span>
         </p>
-        {categories.map((cat, index) => (
-          <span
-            key={index}
-            className={(cat.replace(/ .*/, "") || "category") + " badge me-1"}
-          >
-            {cat}
-          </span>
-        ))}
+
+        <div className="mb-2">
+          {categories.map((cat, index) => (
+            <span
+              key={index}
+              className={(cat.replace(/ .*/, "") || "category") + " badge me-1"}
+            >
+              {cat}
+            </span>
+          ))}
+        </div>
       </Card.Body>
 
       <Card.Footer className="py-4">
@@ -82,8 +100,8 @@ const PopularCard = ({ val }) => {
           </p>
         </Stack>
 
-        <p className="mt-2">
-          <small>Startdate: {startDate ? new Date(startDate).toLocaleDateString() : "N/A"}</small>
+        <p className="mt-2 mb-0">
+          <small>Start date: {startDate ? new Date(startDate).toLocaleDateString() : "N/A"}</small>
         </p>
       </Card.Footer>
     </Card>

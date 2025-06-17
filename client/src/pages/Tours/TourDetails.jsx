@@ -45,7 +45,7 @@ const TourDetails = () => {
         const response = await axios.post("http://localhost:8080/api/admin/reviews", newReview);
         setComments([...comments, response.data]);
 
-        const tourRes = await axios.get(`/api/tours/${id}`);
+        const tourRes = await axios.get(`http://localhost:8080/api/tours/${id}`);
         setTourDetails(tourRes.data);
 
         setRating(0);

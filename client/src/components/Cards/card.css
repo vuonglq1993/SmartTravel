@@ -174,9 +174,20 @@
     font-weight: bold;
 }
 
-
-
-
-
-
+.popular {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .popular .card-body {
+    flex-grow: 1;
+  }
+  
+  .card-title a {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
   
