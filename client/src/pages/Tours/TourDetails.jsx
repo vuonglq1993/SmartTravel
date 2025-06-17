@@ -44,6 +44,10 @@ const TourDetails = () => {
       try {
         const response = await axios.post("http://localhost:8080/api/admin/reviews", newReview);
         setComments([...comments, response.data]);
+
+        const tourRes = await axios.get(`/api/tours/${id}`);
+        setTourDetails(tourRes.data);
+
         setRating(0);
         setComment("");
       } catch (error) {
@@ -103,6 +107,21 @@ const TourDetails = () => {
     return stars;
   };
 
+  const renderStarSelect = () => {
+    return (
+      <div className="d-flex gap-2">
+        {[1, 2, 3, 4, 5].map((num) => (
+          <i
+            key={num}
+            className={`bi ${rating >= num ? "bi-star-fill" : "bi-star"} text-warning`}
+            style={{ cursor: "pointer", fontSize: "1.5rem" }}
+            onClick={() => setRating(num)}
+          ></i>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <>
       <Breadcrumbs
@@ -131,7 +150,7 @@ const TourDetails = () => {
                       <Nav.Link eventKey="1">Overview</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                      <Nav.Link eventKey="2">Reviews</Nav.Link>
+                      <Nav.Link eventKey="2">Reviews {renderStars(tourDetails.averageRating)}</Nav.Link>
                     </Nav.Item>
                   </Nav>
 
@@ -164,20 +183,10 @@ const TourDetails = () => {
                     <Tab.Pane eventKey="2">
                       <Row>
                         <h1 className="h3 mb-2">Post your own review</h1>
-                        <form onSubmit={handleCommentSubmit} className="border rounded">
+                        <form onSubmit={handleCommentSubmit} className="border rounded p-3">
                           <div className="mb-3">
-                            <label htmlFor="rating" className="form-label">Rating (1-5)</label>
-                            <input
-                              type="number"
-                              id="rating"
-                              className="form-control"
-                              value={rating}
-                              onChange={(e) => setRating(parseInt(e.target.value))}
-                              min="1"
-                              max="5"
-                              required
-                              placeholder="Enter rating"
-                            />
+                            <label className="form-label">Rating</label>
+                            {renderStarSelect()}
                           </div>
 
                           <div className="mb-3">
