@@ -1,125 +1,71 @@
-import React from 'react';
-import "../Cards/card.css";
-import { Card, Stack } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import React from "react";
+import { Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 
 const PopularCard = ({ val }) => {
-  if (!val) return null;
-
   const {
-    id = "",
-    title = "Untitled tour",
-    rating = 0,
-    reviews = 0,
-    category = [],
-    price = 0,
-    afterDiscount = null,
-    days = "N/A",
-    startDate = "",
-    destination = {}
+    id,
+    title,
+    description,
+    price,
+    imageUrl,
+    averageRating = 0,
+    reviewCount = 0,
+    destination,
   } = val;
-  const country = destination.country || "Unknown country";
-  const destinationName = destination.name || "Unknown destination";
-  const imageUrl = destination.imageUrl || "https://i.postimg.cc/02pXsCdq/Ulun-Danu-Beratan-Temple.png";
-
-  const categories = Array.isArray(category)
-    ? category
-    : typeof category === "string"
-      ? category.split(",").map((c) => c.trim())
-      : [];
 
   const renderStars = (rating) => {
-    const full = Math.floor(rating);
-    const half = rating % 1 >= 0.5;
-    const empty = 5 - full - (half ? 1 : 0);
-
     const stars = [];
-    for (let i = 0; i < full; i++) {
-      stars.push(<i key={`full-${i}`} className="bi bi-star-fill text-warning"></i>);
-    }
-    if (half) {
-      stars.push(<i key="half" className="bi bi-star-half text-warning"></i>);
-    }
-    for (let i = 0; i < empty; i++) {
-      stars.push(<i key={`empty-${i}`} className="bi bi-star text-warning"></i>);
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating - fullStars >= 0.5;
+
+    for (let i = 0; i < 5; i++) {
+      if (i < fullStars) {
+        stars.push(<FaStar key={i} color="#ffc107" />);
+      } else if (i === fullStars && hasHalfStar) {
+        stars.push(<FaStarHalfAlt key={i} color="#ffc107" />);
+      } else {
+        stars.push(<FaRegStar key={i} color="#ffc107" />);
+      }
     }
     return stars;
   };
 
   return (
-    <Card className="rounded-2 shadow-sm popular h-100 d-flex flex-column">
-      <div
-        style={{
-          width: "100%",
-          height: "300px",
-          overflow: "hidden",
-          borderTopLeftRadius: "0.5rem",
-          borderTopRightRadius: "0.5rem",
-        }}
-      >
+    <Card className="shadow border-0 tour-card">
+      <div className="overflow-hidden">
         <Card.Img
           variant="top"
-          src={imageUrl}
-          alt="Tour Image"
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            display: "block",
-          }}
+          src={imageUrl || destination?.imageUrl || "/default-image.jpg"}
+          alt={title}
+          className="card-img-top object-fit-cover"
+          style={{ height: "250px" }}
         />
       </div>
+      <Card.Body>
+        <Card.Title className="fw-bold fs-5 text-dark">{title}</Card.Title>
+        <Card.Text className="text-muted mb-2">{description}</Card.Text>
 
-      <Card.Body className="flex-grow-1 d-flex flex-column">
-        <Card.Text>
-          <span className="text ms-1">{destinationName}, {country}</span>
-        </Card.Text>
-
-        <Card.Title>
-          <NavLink
-            className="body-text text-dark text-decoration-none"
-            to={`/tours/${id}`}
-          >
-            {title}
-          </NavLink>
-        </Card.Title>
-
-        <p className="reviwe mb-2">
-          {renderStars(rating)} <span className="text-muted ms-1">({reviews} reviews)</span>
-        </p>
-
-        <div className="mb-2">
-          {categories.map((cat, index) => (
-            <span
-              key={index}
-              className={(cat.replace(/ .*/, "") || "category") + " badge me-1"}
-            >
-              {cat}
-            </span>
-          ))}
-        </div>
-      </Card.Body>
-
-      <Card.Footer className="py-4">
-        {afterDiscount !== null && afterDiscount < price && (
-          <p className="text-decoration-line-through text-muted mb-1">
-            ${price.toFixed(2)}
+        {reviewCount > 0 ? (
+          <p className="review mb-2">
+            {renderStars(averageRating)}{" "}
+            <span className="text-muted ms-1">({reviewCount} reviews)</span>
           </p>
+        ) : (
+          <p className="text-muted mb-2">Chưa có đánh giá</p>
         )}
 
-        <Stack direction="horizontal" className="justify-content-between mt-1">
-          <p className="mb-0">
-            From <b>${(afterDiscount !== null && afterDiscount < price ? afterDiscount : price).toFixed(2)}</b>
-          </p>
-          <p className="mb-0">
-            <i className="bi bi-clock me-1"></i> {days}
-          </p>
-        </Stack>
-
-        <p className="mt-2 mb-0">
-          <small>Start date: {startDate ? new Date(startDate).toLocaleDateString() : "N/A"}</small>
-        </p>
-      </Card.Footer>
+        <div className="d-flex justify-content-between align-items-center">
+          <span className="fw-bold text-primary">${price}</span>
+          <Link
+            to={`/tours/${id}`}
+            className="btn btn-sm btn-outline-primary"
+          >
+            View Details
+          </Link>
+        </div>
+      </Card.Body>
     </Card>
   );
 };

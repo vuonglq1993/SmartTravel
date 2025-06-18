@@ -33,6 +33,7 @@ npm install
 ### Cài đặt các thư viện cần thiết
 
 npm install react-router-dom react-datepicker react-bootstrap react-lightbox-gallery react-paginate react-slick slick-carousel react-image-gallery bootstrap --legacy-peer-deps 
+npm install react-icons --legacy-peer-deps 
 
 ### Chạy frontend tại http://localhost:3000
 
