@@ -70,7 +70,7 @@ const Footer = () => {
             </Col>
 
             <Col md="4" sm="12" className="text-center mt-1 copyright">
-              <p>Copyright 2024 © by Group 1 T2403M Aptech HaNoi</p>
+              <p>Copyright 2025 © by Group 1 T2408M Aptech HaNoi</p>
             </Col>
 
             <Col md="4  " sm="12" className="text-md-end mt-1 text-center footer_social_icons">

@@ -7,10 +7,11 @@ const PhotoGallery = () => {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
+    // Set page title and scroll to top
     document.title = "Gallery";
     window.scrollTo(0, 0);
 
-    // ⚠️ fetch từ backend Spring Boot
+    // Fetch image data from backend (Spring Boot)
     fetch("http://localhost:8080/api/images")
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch images");
@@ -22,11 +23,15 @@ const PhotoGallery = () => {
 
   return (
     <>
+      {/* Breadcrumb navigation */}
       <Breadcrumbs title="Gallery" pagename="Gallery" />
+
+      {/* Image gallery section */}
       <section className="py-5" style={{ overflow: "hidden" }}>
         <Container>
           <Row>
             <Col>
+              {/* Render the gallery with fetched images */}
               <Gallery images={images} />
             </Col>
           </Row>
