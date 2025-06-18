@@ -4,57 +4,86 @@ import "./Login.css";
 import logo from "../../assets/images/logo/logo co màu.png";
 import axios from "axios";
 
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import axios from "axios";
-import "../styles/Login.css";
-
-const LoginAdmin = () => {
-  const { setIsAuthenticated } = useAuth();
-  const navigate = useNavigate();
-
+const LoginModal = ({ isOpen, toggle, setUser }) => {
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [isLoginMode, setIsLoginMode] = useState(true);
+  const [emailCheckResult, setEmailCheckResult] = useState("");
   const [formData, setFormData] = useState({
+    username: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
+
+  if (!isOpen) return null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData({ ...formData, [name]: value });
+    if (name === "email") setEmailCheckResult("");
+  };
+
+  const handleEmailCheck = async () => {
+    if (!formData.email) {
+      setEmailCheckResult("Please enter an email to check.");
+      return;
+    }
+
+    try {
+      const response = await axios.get(`http://localhost:8080/api/auth/check-email?email=${formData.email}`);
+      setEmailCheckResult(response.data.exists ? "This email is already registered." : "This email is available.");
+    } catch (error) {
+      setEmailCheckResult("An error occurred while checking the email.");
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { email, password } = formData;
+    if (!formData.email || !formData.password || (!isLoginMode && !formData.username)) {
+      alert("All fields are required.");
+      return;
+    }
 
-    if (!email || !password) {
-      alert("Vui lòng nhập đầy đủ thông tin.");
+    if (!isLoginMode && formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      alert("Password must be at least 6 characters!");
       return;
     }
 
     try {
-      const response = await axios.post("http://localhost:8080/api/auth/login", {
-        email,
-        password,
-      });
+      const payload = isLoginMode
+        ? { email: formData.email, password: formData.password }
+        : { username: formData.username, email: formData.email, password: formData.password };
 
-      const userData = response.data.data;
+      const url = isLoginMode
+        ? "http://localhost:8080/api/auth/login"
+        : "http://localhost:8080/api/auth/create";
 
-      if (!userData || userData.role !== "ADMIN") {
-        alert("Bạn không có quyền truy cập vào trang admin.");
-        return;
-      }
+      const response = await axios.post(url, payload);
 
+      const userData = isLoginMode ? response.data.data : response.data;
       localStorage.setItem("user", JSON.stringify(userData));
-      localStorage.setItem("auth", "true");
-      setIsAuthenticated(true);
-      navigate("/admin/dashboard");
+      setUser(userData);
+
+      setShowSuccessPopup(true);
+      setTimeout(() => {
+        setShowSuccessPopup(false);
+        toggle();
+      }, 1500);
     } catch (error) {
-      console.error("Đăng nhập thất bại:", error.response?.data || error.message);
-      alert(error.response?.data?.message || "Lỗi khi đăng nhập.");
+      console.error("API error:", error.response?.data || error.message);
+      alert(error.response?.data?.message || "An error occurred!");
     }
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    toggle();
   };
 
   return (

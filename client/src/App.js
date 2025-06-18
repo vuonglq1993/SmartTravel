@@ -10,9 +10,10 @@ import Tours from "./pages/Tours/Tours";
 import Search from './pages/Search/Search';
 import TourDetails from "./pages/Tours/TourDetails";
 import Booking from "./pages/Booking/Booking";
-import TopPalces from "./pages/Destinations/Destinations";  
+import Destinations from './pages/Destinations/Destinations';
 import PhotoGallery from "./pages/PhotoGallery/PhotoGallery";
 import "react-datepicker/dist/react-datepicker.css";
+import AutoSendEmail from './components/AutosendEmail/AutosendEmail';
 // import Success from "./pages/Booking/Success";
 
 function App() {
@@ -45,8 +46,9 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/tours/:id" element={<TourDetails />} />
         <Route path="/booking/:id" element={<Booking />} />
-        <Route path="/top-places" element={<TopPalces />} />
+        <Route path="/destinations" element={<Destinations />} />
         <Route path="/gallery" element={<PhotoGallery />} />
+        <Route path = "/auto-send-email" element = {<AutoSendEmail />} />
         {/* <Route path="/success" element={<Success />} /> */}
       </Routes>
       <Footer />

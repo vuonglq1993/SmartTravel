@@ -10,42 +10,9 @@ import group113 from "../../assets/images/about/Group 113.png";
 import group114 from "../../assets/images/about/Group 114.png";
 import group115 from "../../assets/images/about/Group 115.png";
 import group116 from "../../assets/images/about/Group 116.png";
-import thai from "../../assets/images/us/yyy.jpg";
-import vuong from "../../assets/images/us/vuong.jpg";
-import huy from "../../assets/images/us/huy.jpg";
-import tung from "../../assets/images/us/tung.jpg";
 
 const About = () => {
-  const Usdata = [
-    {
-      id: 1,
-      img: tung,
-      name: "Le Khanh Tung",
-      position: "Chief Marketing Officer (CMO)",
-      desc: "Tung, an expert in digital marketing, leads our branding and marketing efforts, connecting Travel Smart with a global audience.",
-    },
-    {
-      id: 2,
-      img: vuong,
-      name: "Le Quy Vuong",
-      position:"Chief Technology Officer (CTO)",
-      desc: "8 years of experience, drives technology development for Travel Smart, ensuring seamless and secure travel booking systems.",
-    },
-    {
-      id: 3,
-      img: huy,
-      name: "Dang Quang Huy",
-      position:"Chief Operations Officer (COO)",
-      desc: "7 years of expertise in optimizing backend processes for a seamless travel experience.",
-    },
-    {
-      id: 4,
-      img: thai,
-      name: "Chu Ng Quang Thai",
-      position:"Head of Customer Experience",
-      desc: " 6 years of experience in customer service, dedicated to enhancing every traveler’s journey with exceptional support.",
-    },
-  ];
+
   useEffect(() => {
     document.title = "About us";
     window.scroll(0, 0);

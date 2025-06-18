@@ -1,49 +1,68 @@
-import React,{useEffect, useState} from 'react'
-import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs'
-import { Col, Container, Row } from 'react-bootstrap'
-import { destinationsData } from '../../utils/data'
-import Cards from '../../components/Cards/Cards'
-import Pagination from '../../components/Pagination/Pagination'
+import React, { useEffect, useState } from "react";
+import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs";
+import { Col, Container, Row } from "react-bootstrap";
+import Cards from "../../components/Cards/Cards";
+import Pagination from "../../components/Pagination/Pagination";
+import axios from "axios";
 
 const Destinations = () => {
-  const [curentpage, setCurrentPage] = useState(0);
-  const itemsPerPage = 8;
-  const offset = curentpage * itemsPerPage;
-  const currentItems = destinationsData.slice(offset, offset + itemsPerPage);
-  const handlePageClick = ({ selected }) => {
-      setCurrentPage(selected);
-  };
+    const [tours, setTours] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
 
-  useEffect(()=>{
-    document.title =" Top Places  "
-    window.scroll(0, 0)
-  },[])
+    const itemsPerPage = 6;
+    const offset = currentPage * itemsPerPage;
+    const currentItems = tours.slice(offset, offset + itemsPerPage);
 
+    const handlePageClick = ({ selected }) => {
+        setCurrentPage(selected);
+    };
 
-  return (
-      <>
-          <Breadcrumbs title="Top Places" pagename="top-places" />
-          <section className="py-5">
-              <Container>
-                  <Row>
-                      {currentItems.map((destination, inx) => {
-                          return (
-                              <Col md="3" sm="6" key={inx} className="pb-4">
-                                  <Cards destination={destination} key={inx} />
-                              </Col>
-                          );
-                      })}
-                  </Row>
-                  <Pagination
-                      pageCount={Math.ceil(
-                          destinationsData.length / itemsPerPage
-                      )}
-                      onPageChange={handlePageClick}
-                  />
-              </Container>
-          </section>
-      </>
-  );
-}
+    const fetchTours = async () => {
+        try {
+            const res = await axios.get("http://localhost:8080/api/tours");
+            setTours(res.data);
+        } catch (error) {
+            console.error("Failed to fetch tours:", error);
+        }
+    };
 
-export default Destinations
+    useEffect(() => {
+        document.title = "Top Places";
+        window.scrollTo(0, 0);
+        fetchTours();
+    }, []);
+
+    return (
+        <>
+            <Breadcrumbs title="Top Places" pagename="top-places" />
+            <section className="py-5">
+                <Container>
+                    <Row>
+                        <Row>
+                            {currentItems.map((tour, index) => (
+                                <Col md="4" sm="6" key={index} className="pb-4">
+                                    <Cards
+                                        key={index}
+                                        id={tour.id}
+                                        destination={{
+                                            name: tour.destination?.name?.trim(),
+                                            imageUrl: tour.destination?.imageUrl,
+                                        }}
+                                        rating={tour.averageRating}
+                                    />
+                                </Col>
+                            ))}
+                        </Row>
+
+                    </Row>
+                    <Pagination
+                        pageCount={Math.ceil(tours.length / itemsPerPage)}
+                        onPageChange={handlePageClick}
+                    />
+                </Container>
+            </section>
+        </>
+    );
+};
+
+export default Destinations;

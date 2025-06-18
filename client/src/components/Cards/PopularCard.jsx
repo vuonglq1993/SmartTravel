@@ -48,12 +48,28 @@ const PopularCard = ({ val }) => {
 
   return (
     <Card className="rounded-2 shadow-sm popular h-100 d-flex flex-column">
-      <Card.Img
-        variant="top"
-        src={imageUrl}
-        className="img-fluid"
-        alt="Tour Image"
-      />
+      <div
+        style={{
+          width: "100%",
+          height: "300px",
+          overflow: "hidden",
+          borderTopLeftRadius: "0.5rem",
+          borderTopRightRadius: "0.5rem",
+        }}
+      >
+        <Card.Img
+          variant="top"
+          src={imageUrl}
+          alt="Tour Image"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
+          }}
+        />
+      </div>
+
       <Card.Body className="flex-grow-1 d-flex flex-column">
         <Card.Text>
           <span className="text ms-1">{destinationName}, {country}</span>

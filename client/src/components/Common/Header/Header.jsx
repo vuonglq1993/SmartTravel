@@ -56,7 +56,7 @@ const Header = ({ user, setUser }) => {
               <NavLink className="nav-link m-3" to="/" onClick={closeMenu}>Home</NavLink>
               <NavLink className="nav-link m-3" to="/about-us" onClick={closeMenu}>ABOUT US</NavLink>
               <NavLink className="nav-link m-3" to="/tours" onClick={closeMenu}>TOURS</NavLink>
-              <NavLink className="nav-link m-3" to="/top-places" onClick={closeMenu}>TOP PLACES</NavLink>
+              <NavLink className="nav-link m-3" to="/destinations" onClick={closeMenu}>Destinations</NavLink>
               <NavLink className="nav-link m-3" to="/gallery" onClick={closeMenu}>GALLERY</NavLink>
               <NavLink className="nav-link m-3" to="/contact-us" onClick={closeMenu}>CONTACT</NavLink>
             </Nav>

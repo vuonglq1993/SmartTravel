@@ -10,24 +10,19 @@ import "slick-carousel/slick/slick-theme.css";
 import "./home.css";
 import Footerapp from "../../assets/images/footerapp/footerapp.png";
 import Cards from "../../components/Cards/Cards";
-import { destinationsData } from "../../utils/data";  // vẫn dùng data giả cho Top places
 import PopularCard from "../../components/Cards/PopularCard";
 import Appstore from "../../assets/images/footerapp/Appstore.png";
 import CHPplay from "../../assets/images/footerapp/CHplay.png";
 
 const Home = () => {
-  // State chứa danh sách tours lấy từ backend
   const [tours, setTours] = useState([]);
 
-  // State cho filter (nếu dùng AdvanceSearch nâng cao)
-  const [filters, setFilters] = useState({
-    destinationName: "",
-    country: "",
-    minPrice: "",
-    maxPrice: "",
-  });
+  useEffect(() => {
+    document.title = "Home";
+    window.scrollTo(0, 0);
+    fetchTours();
+  }, []);
 
-  // Gọi API lấy toàn bộ tour
   const fetchTours = async () => {
     try {
       const res = await axios.get("http://localhost:8080/api/tours");
@@ -37,19 +32,6 @@ const Home = () => {
     }
   };
 
-  // Hàm xử lý khi search (nếu cần)
-  const handleSearch = () => {
-    console.log("Searching with filters:", filters);
-    // Có thể gọi API lọc theo filters ở đây nếu muốn
-  };
-
-  useEffect(() => {
-    document.title = "Home";
-    window.scroll(0, 0);
-    fetchTours();
-  }, []);
-
-  // Cấu hình slick slider cho Top places
   const settings = {
     dots: false,
     infinite: true,
@@ -57,44 +39,10 @@ const Home = () => {
     slidesToShow: 4,
     slidesToScroll: 1,
     responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 1,
-          infinite: false,
-          dots: true,
-          autoplay: true,
-        },
-      },
-      {
-        breakpoint: 991,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-          infinite: false,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          autoplay: true,
-          prevArrow: false,
-          nextArrow: false,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          prevArrow: false,
-          nextArrow: false,
-        },
-      },
+      { breakpoint: 1024, settings: { slidesToShow: 4, dots: true, autoplay: true } },
+      { breakpoint: 991, settings: { slidesToShow: 3, dots: true } },
+      { breakpoint: 600, settings: { slidesToShow: 2, slidesToScroll: 2 } },
+      { breakpoint: 480, settings: { slidesToShow: 1 } },
     ],
   };
 
@@ -108,24 +56,31 @@ const Home = () => {
           <Row>
             <Col md="12">
               <div className="main_heading">
-                <p className="fs-2 text-uppercase"> Top places</p>
+                <p className="fs-2 text-uppercase"> Destinations</p>
               </div>
             </Col>
           </Row>
-
           <Row>
             <Col md="12">
               <Slider {...settings}>
-                {destinationsData.map((destination, inx) => (
-                  <Cards destination={destination} key={inx} />
+                {tours.map((tour, index) => (
+                  <Cards
+                    key={index}
+                    id={tour.id}
+                    destination={{
+                      name: tour.destination?.name?.trim(),
+                      imageUrl: tour.destination?.imageUrl,
+                    }}
+                    rating={tour.averageRating}
+                  />
                 ))}
               </Slider>
+
             </Col>
           </Row>
         </Container>
       </section>
 
-      {/* Phần Popular Tours sử dụng data từ backend */}
       <section className="popular py-5">
         <Container>
           <Row>
@@ -162,7 +117,7 @@ const Home = () => {
             <Col md="8">
               <h5 className="title">CALL TO ACTION</h5>
               <h2 className="heading">
-                READY FOR UNFORGATABLE TRAVEL. REMEMBER US!
+                READY FOR UNFORGETTABLE TRAVEL. REMEMBER US!
               </h2>
               <p className="text">
                 Explore the world like never before! From the serene beaches of Bali to the majestic mountains of the Swiss Alps, every destination offers a unique experience waiting to be discovered. Immerse yourself in vibrant cultures, savor delicious cuisines, and create memories that will last a lifetime. Let us guide you on your next adventure!
@@ -170,8 +125,8 @@ const Home = () => {
             </Col>
             <Col md="4" className="text-center mt-3 mt-md-0">
               <Link to="contact-us" style={{ textDecoration: "none" }}>
-                <Button className="primaryBtn flex-even d-flex justify-content-center">
-                  <i className="bi bi-search me-2"></i> Contact Us
+                <Button className="primaryBtn d-flex justify-content-center">
+                  Contact Us
                 </Button>
               </Link>
             </Col>
@@ -179,7 +134,6 @@ const Home = () => {
         </Container>
         <div className="overlay"></div>
       </section>
-
 
       <section className="download mt-5">
         <Container>
@@ -193,26 +147,14 @@ const Home = () => {
               </p>
               <Row>
                 <Col md="6">
-                  <div>
-                    <a href="/" tabIndex="0">
-                      <img
-                        className="img-fluid mt-3"
-                        src={Appstore}
-                        alt="appstore"
-                      />
-                    </a>
-                  </div>
+                  <a href="/">
+                    <img className="img-fluid mt-3" src={Appstore} alt="appstore" />
+                  </a>
                 </Col>
                 <Col md="6">
-                  <div>
-                    <a href="/" tabIndex="0">
-                      <img
-                        className="img-fluid mt-3"
-                        src={CHPplay}
-                        alt="chplay"
-                      />
-                    </a>
-                  </div>
+                  <a href="/">
+                    <img className="img-fluid mt-3" src={CHPplay} alt="chplay" />
+                  </a>
                 </Col>
               </Row>
             </Col>
