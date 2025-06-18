@@ -10,7 +10,7 @@ const Cards = ({ id, destination }) => {
         className="body-text text-dark text-decoration-none"
         to={`/tours/${id}`}
       >
-        <Card style={{ height: "400px", overflow: "hidden", borderRadius: "12px" }}>
+        <Card style={{ height: "300px", overflow: "hidden", borderRadius: "12px" }}>
           <Card.Img
             variant="top"
             src={destination.imageUrl}

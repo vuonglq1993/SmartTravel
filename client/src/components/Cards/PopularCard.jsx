@@ -40,7 +40,7 @@ const PopularCard = ({ val }) => {
           src={imageUrl || destination?.imageUrl || "/default-image.jpg"}
           alt={title}
           className="card-img-top object-fit-cover"
-          style={{ height: "250px" }}
+          style={{ height: "400px" }}
         />
       </div>
       <Card.Body>
