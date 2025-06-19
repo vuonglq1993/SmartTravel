@@ -1,3 +1,5 @@
+// BookingManagement.jsx — đã sửa token và giữ nguyên CSS import
+
 import React, { useEffect, useState } from "react";
 import "../styles/BookingManagement.css";
 
@@ -18,6 +20,8 @@ const BookingManagement = () => {
     status: "Pending",
   });
 
+  const getToken = () => localStorage.getItem("token");
+
   useEffect(() => {
     fetchBookings();
     fetchTours();
@@ -26,7 +30,14 @@ const BookingManagement = () => {
 
   const fetchBookings = async () => {
     try {
-      const res = await fetch(API_URL);
+      const token = getToken();
+      const res = await fetch(API_URL, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) throw new Error(`Error fetching bookings: ${res.status}`);
       const data = await res.json();
       setBookings(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -37,7 +48,14 @@ const BookingManagement = () => {
 
   const fetchTours = async () => {
     try {
-      const res = await fetch(TOURS_API);
+      const token = getToken();
+      const res = await fetch(TOURS_API, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) throw new Error(`Error fetching tours: ${res.status}`);
       const data = await res.json();
       setTours(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -47,7 +65,14 @@ const BookingManagement = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch(USERS_API);
+      const token = getToken();
+      const res = await fetch(USERS_API, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) throw new Error(`Error fetching users: ${res.status}`);
       const data = await res.json();
       setUsers(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -58,28 +83,41 @@ const BookingManagement = () => {
   const handleStatusChange = async (id, newStatus) => {
     const booking = bookings.find((b) => b.id === id);
     if (!booking) return;
+
     const updatedBooking = { ...booking, status: newStatus };
 
     try {
+      const token = getToken();
       const res = await fetch(`${API_URL}/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(updatedBooking),
       });
       if (res.ok) fetchBookings();
+      else console.error("Update booking failed with status:", res.status);
     } catch (err) {
       console.error("Lỗi khi cập nhật booking:", err);
     }
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Xoá đơn đặt tour này?")) {
-      try {
-        const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-        if (res.ok) fetchBookings();
-      } catch (err) {
-        console.error("Lỗi khi xoá booking:", err);
-      }
+    if (!window.confirm("Xoá đơn đặt tour này?")) return;
+
+    try {
+      const token = getToken();
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.ok) fetchBookings();
+      else console.error("Delete booking failed with status:", res.status);
+    } catch (err) {
+      console.error("Lỗi khi xoá booking:", err);
     }
   };
 
@@ -96,9 +134,13 @@ const BookingManagement = () => {
     }
 
     try {
+      const token = getToken();
       const res = await fetch(API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
           user: { id: parseInt(userId) },
           tour: tour,
@@ -110,6 +152,8 @@ const BookingManagement = () => {
         fetchBookings();
         setShowForm(false);
         setNewBooking({ userId: "", tourId: "", date: "", status: "Pending" });
+      } else {
+        console.error("Tạo booking thất bại với status:", res.status);
       }
     } catch (err) {
       console.error("Lỗi tạo booking:", err);
@@ -139,36 +183,52 @@ const BookingManagement = () => {
         </select>
       </div>
 
-      <button className="add-btn" onClick={() => setShowForm(true)}>+ Tạo Booking</button>
+      <button className="add-btn" onClick={() => setShowForm(true)}>
+        + Tạo Booking
+      </button>
 
       {showForm && (
         <div className="booking-form">
           <select
             value={newBooking.userId}
-            onChange={(e) => setNewBooking({ ...newBooking, userId: e.target.value })}
+            onChange={(e) =>
+              setNewBooking({ ...newBooking, userId: e.target.value })
+            }
           >
             <option value="">-- Chọn khách hàng --</option>
             {users.map((u) => (
-              <option key={u.id} value={u.id}>{u.username}</option>
+              <option key={u.id} value={u.id}>
+                {u.username}
+              </option>
             ))}
           </select>
           <select
             value={newBooking.tourId}
-            onChange={(e) => setNewBooking({ ...newBooking, tourId: e.target.value })}
+            onChange={(e) =>
+              setNewBooking({ ...newBooking, tourId: e.target.value })
+            }
           >
             <option value="">-- Chọn tour --</option>
             {tours.map((tour) => (
-              <option key={tour.id} value={tour.id}>{tour.title}</option>
+              <option key={tour.id} value={tour.id}>
+                {tour.title}
+              </option>
             ))}
           </select>
           <input
             type="date"
             value={newBooking.date}
-            onChange={(e) => setNewBooking({ ...newBooking, date: e.target.value })}
+            onChange={(e) =>
+              setNewBooking({ ...newBooking, date: e.target.value })
+            }
           />
           <div>
-            <button className="add-btn" onClick={handleCreateBooking}>Tạo</button>
-            <button className="cancel-btn" onClick={() => setShowForm(false)}>Huỷ</button>
+            <button className="add-btn" onClick={handleCreateBooking}>
+              Tạo
+            </button>
+            <button className="cancel-btn" onClick={() => setShowForm(false)}>
+              Huỷ
+            </button>
           </div>
         </div>
       )}
@@ -185,29 +245,33 @@ const BookingManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {Array.isArray(filteredBookings) && filteredBookings.map((b) => (
-            <tr key={b.id}>
-              <td>{b.id}</td>
-              <td>{b.user?.username || "Không rõ"}</td>
-              <td>{b.tour?.title || "Không rõ"}</td>
-              <td>{b.bookingDate?.slice(0, 10) || "Không rõ"}</td>
-              <td>
-                <select
-                  value={b.status}
-                  onChange={(e) => handleStatusChange(b.id, e.target.value)}
-                >
-                  <option value="Pending">Pending</option>
-                  <option value="Confirmed">Confirmed</option>
-                  <option value="Cancelled">Cancelled</option>
-                </select>
-              </td>
-              <td>
-                <button className="delete-btn" onClick={() => handleDelete(b.id)}>
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
+          {Array.isArray(filteredBookings) &&
+            filteredBookings.map((b) => (
+              <tr key={b.id}>
+                <td>{b.id}</td>
+                <td>{b.user?.username || "Không rõ"}</td>
+                <td>{b.tour?.title || "Không rõ"}</td>
+                <td>{b.bookingDate?.slice(0, 10) || "Không rõ"}</td>
+                <td>
+                  <select
+                    value={b.status}
+                    onChange={(e) => handleStatusChange(b.id, e.target.value)}
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+                </td>
+                <td>
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDelete(b.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>

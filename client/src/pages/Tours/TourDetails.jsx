@@ -240,7 +240,7 @@ const TourDetails = () => {
                         </div>
 
                         <NavLink
-                          to="/booking"
+                          to={`/booking/${id}`}
                           className="primaryBtn w-100 d-flex justify-content-center fw-bold"
                         >
                           Book Now

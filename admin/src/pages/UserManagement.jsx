@@ -1,3 +1,5 @@
+// src/pages/UserManagement.jsx
+
 import React, { useEffect, useState } from "react";
 import "../styles/UserManagement.css";
 
@@ -14,49 +16,59 @@ const UserManagement = () => {
     fetchUsers();
   }, []);
 
+  const getAuthHeader = () => {
+    const token = localStorage.getItem("token");
+    return {
+      Authorization: `Bearer ${token}`,
+    };
+  };
+
   const fetchUsers = async () => {
     try {
-      const res = await fetch(API_URL);
+      const res = await fetch(API_URL, {
+        headers: getAuthHeader(),
+      });
+      if (!res.ok) throw new Error("Unauthorized");
       const data = await res.json();
       setUsers(data);
     } catch (err) {
       console.error("Lỗi khi fetch users:", err);
     }
   };
-const isValidEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
+
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleInputChange = (e) => {
     setFormUser({ ...formUser, [e.target.name]: e.target.value });
   };
 
   const handleAddUser = async () => {
-  if (!formUser.name.trim() || !formUser.email.trim()) {
-    setError("Vui lòng nhập đầy đủ tên và email.");
-    return;
-  }
-  if (!isValidEmail(formUser.email)) {
-    setError("Email không đúng định dạng.");
-    return;
-  }
-  setError("");
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formUser),
-    });
-    if (res.ok) {
-      fetchUsers();
-      resetForm();
+    if (!formUser.name.trim() || !formUser.email.trim()) {
+      setError("Vui lòng nhập đầy đủ tên và email.");
+      return;
     }
-  } catch (err) {
-    console.error("Lỗi khi thêm user:", err);
-  }
-};
-
+    if (!isValidEmail(formUser.email)) {
+      setError("Email không đúng định dạng.");
+      return;
+    }
+    setError("");
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...getAuthHeader(),
+        },
+        body: JSON.stringify(formUser),
+      });
+      if (res.ok) {
+        fetchUsers();
+        resetForm();
+      }
+    } catch (err) {
+      console.error("Lỗi khi thêm user:", err);
+    }
+  };
 
   const handleEditUser = (user) => {
     setIsEditing(true);
@@ -66,35 +78,40 @@ const isValidEmail = (email) => {
   };
 
   const handleUpdateUser = async () => {
-  if (!formUser.name.trim() || !formUser.email.trim()) {
-    setError("Vui lòng nhập đầy đủ tên và email.");
-    return;
-  }
-  if (!isValidEmail(formUser.email)) {
-    setError("Email không đúng định dạng.");
-    return;
-  }
-  setError("");
-  try {
-    const res = await fetch(`${API_URL}/${formUser.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formUser),
-    });
-    if (res.ok) {
-      fetchUsers();
-      resetForm();
+    if (!formUser.name.trim() || !formUser.email.trim()) {
+      setError("Vui lòng nhập đầy đủ tên và email.");
+      return;
     }
-  } catch (err) {
-    console.error("Lỗi khi cập nhật user:", err);
-  }
-};
-
+    if (!isValidEmail(formUser.email)) {
+      setError("Email không đúng định dạng.");
+      return;
+    }
+    setError("");
+    try {
+      const res = await fetch(`${API_URL}/${formUser.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          ...getAuthHeader(),
+        },
+        body: JSON.stringify(formUser),
+      });
+      if (res.ok) {
+        fetchUsers();
+        resetForm();
+      }
+    } catch (err) {
+      console.error("Lỗi khi cập nhật user:", err);
+    }
+  };
 
   const handleDeleteUser = async (id) => {
     if (window.confirm("Bạn có chắc muốn xoá người dùng này?")) {
       try {
-        const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+        const res = await fetch(`${API_URL}/${id}`, {
+          method: "DELETE",
+          headers: getAuthHeader(),
+        });
         if (res.ok) {
           fetchUsers();
         }
