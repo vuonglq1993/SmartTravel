@@ -114,9 +114,6 @@ const isValidEmail = (email) => {
   return (
     <div className="user-container">
       <h2>User Management</h2>
-      <button className="add-btn" onClick={() => { setShowForm(true); setIsEditing(false); setFormUser({ id: null, name: "", email: "", role: "User" }); setError(""); }}>
-        + Add User
-      </button>
 
       {showForm && (
         <div className="user-form">
