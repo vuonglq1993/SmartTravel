@@ -68,7 +68,7 @@ const Booking = () => {
       }
     } catch (error) {
       console.error("Payment process failed:", error.response?.data || error);
-      alert("Lỗi khi xử lý thanh toán: " + (error.response?.data?.message || error.message));
+      alert("Error during payment processing: " + (error.response?.data?.message || error.message));
     }
   };
 
@@ -107,7 +107,7 @@ const Booking = () => {
                     </Form.Group>
 
                     <Form.Group className="mb-4" controlId="quantity" as={Col} md="6">
-                      <Form.Label>Số lượng người</Form.Label>
+                      <Form.Label>Number of People</Form.Label>
                       <Form.Control
                         type="number"
                         min={1}
@@ -155,41 +155,40 @@ const Booking = () => {
             </Col>
 
             <Col md="4" lg="4">
-  <Card className="card-info p-0 shadow-sm bg-white">
-    <Card.Header>
-      <h1 className="font-bold h4 mt-2">Price Summary</h1>
-    </Card.Header>
-    <Card.Body className="pb-0">
-      <ListGroup>
-        <ListGroup.Item className="border-0 d-flex justify-content-between h5 pt-0">
-          <span>Base Price</span>
-          <strong>${tour?.price?.toFixed(2) || 0}</strong>
-        </ListGroup.Item>
+              <Card className="card-info p-0 shadow-sm bg-white">
+                <Card.Header>
+                  <h1 className="font-bold h4 mt-2">Price Summary</h1>
+                </Card.Header>
+                <Card.Body className="pb-0">
+                  <ListGroup>
+                    <ListGroup.Item className="border-0 d-flex justify-content-between h5 pt-0">
+                      <span>Base Price</span>
+                      <strong>${tour?.price?.toFixed(2) || 0}</strong>
+                    </ListGroup.Item>
 
-        <ListGroup.Item className="border-0 d-flex justify-content-between h5 pt-0">
-          <span>Taxes & Fees</span>
-          <strong>$100.00</strong>
-        </ListGroup.Item>
+                    <ListGroup.Item className="border-0 d-flex justify-content-between h5 pt-0">
+                      <span>Taxes & Fees</span>
+                      <strong>$10.00</strong>
+                    </ListGroup.Item>
 
-        <ListGroup.Item className="border-0 d-flex justify-content-between h5 pt-0">
-          <span>Quantity</span>
-          <strong>{quantity}</strong>
-        </ListGroup.Item>
+                    <ListGroup.Item className="border-0 d-flex justify-content-between h5 pt-0">
+                      <span>Quantity</span>
+                      <strong>{quantity}</strong>
+                    </ListGroup.Item>
 
-        <ListGroup.Item className="border-top d-flex justify-content-between h5 pt-3 fw-bold">
-          <span>Total Price</span>
-          <span>
-            $
-            {tour
-              ? (((tour.afterDiscount || tour.price || 0) + 100) * quantity).toFixed(2)
-              : "0.00"}
-          </span>
-        </ListGroup.Item>
-      </ListGroup>
-    </Card.Body>
-  </Card>
-</Col>
-
+                    <ListGroup.Item className="border-top d-flex justify-content-between h5 pt-3 fw-bold">
+                      <span>Total Price</span>
+                      <span>
+                        $
+                        {tour
+                          ? (((tour.afterDiscount || tour.price || 0) + 100) * quantity).toFixed(2)
+                          : "0.00"}
+                      </span>
+                    </ListGroup.Item>
+                  </ListGroup>
+                </Card.Body>
+              </Card>
+            </Col>
           </Row>
 
           <Row>

@@ -5,7 +5,7 @@ import "./Success.css";
 
 const Success = () => {
   const [searchParams] = useSearchParams();
-  const [message, setMessage] = useState("Đang xử lý thanh toán...");
+  const [message, setMessage] = useState("Processing your payment...");
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -13,12 +13,12 @@ const Success = () => {
     const payerId = searchParams.get("PayerID");
 
     if (!paymentId || !payerId) {
-      setError("Thiếu thông tin thanh toán.");
+      setError("Missing payment information.");
       return;
     }
 
     if (localStorage.getItem(`executed-${paymentId}`)) {
-      setMessage("✅ Thanh toán đã hoàn tất.");
+      setMessage("✅ Payment has already been completed.");
       return;
     }
 
@@ -27,16 +27,16 @@ const Success = () => {
       { method: "GET" }
     )
       .then((res) => {
-        if (!res.ok) throw new Error("Lỗi khi xác nhận thanh toán.");
+        if (!res.ok) throw new Error("Error while confirming the payment.");
         return res.json();
       })
       .then(() => {
         localStorage.setItem(`executed-${paymentId}`, "done");
-        setMessage("🎉 Thanh toán thành công! Cảm ơn bạn đã đặt tour.");
+        setMessage("🎉 Payment successful! Thank you for booking the tour.");
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
       })
       .catch((err) => {
-        setError("❌ Lỗi xác nhận: " + err.message);
+        setError("❌ Confirmation error: " + err.message);
       });
   }, [searchParams]);
 
@@ -49,11 +49,11 @@ const Success = () => {
             <path className="check" d="M14 27l7 7 16-16" />
           </svg>
         </div>
-        <h2>{error ? "Thanh toán thất bại" : "Thanh toán thành công"}</h2>
+        <h2>{error ? "Payment Failed" : "Payment Successful"}</h2>
         <p>{error || message}</p>
         {!error && (
           <p className="sub">
-            Cảm ơn bạn! Tour đã được ghi nhận. Hẹn gặp lại trên hành trình tiếp theo! ✈️
+            Thank you! Your tour has been recorded. See you on your next journey! ✈️
           </p>
         )}
       </div>
