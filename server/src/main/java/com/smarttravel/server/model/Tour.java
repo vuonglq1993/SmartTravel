@@ -32,9 +32,9 @@ public class Tour {
     @JsonIgnore
     private List<Booking> bookings;
 
-    @OneToMany(mappedBy = "tour")
-    @JsonIgnore
-    private List<Review> reviews;
+    @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews; 
+    
 
     @OneToMany(mappedBy = "tour")
     @JsonIgnore

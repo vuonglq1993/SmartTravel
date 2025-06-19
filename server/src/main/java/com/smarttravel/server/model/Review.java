@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "reviews")
 public class Review {
@@ -17,6 +19,7 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "tour_id")
+    @JsonIgnore
     private Tour tour;
 
     private int rating;
