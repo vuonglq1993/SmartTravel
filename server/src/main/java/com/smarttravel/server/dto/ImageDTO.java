@@ -1,5 +1,11 @@
 package com.smarttravel.server.dto;
 
+import lombok.Builder;
+import lombok.*;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ImageDTO {
     private int id;
     private String url;

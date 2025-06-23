@@ -1,6 +1,10 @@
 package com.smarttravel.server.dto;
 
 import com.smarttravel.server.model.User;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 
 public class ResultUser {
     boolean result;

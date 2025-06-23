@@ -1,5 +1,9 @@
 package com.smarttravel.server.dto;
 
+import lombok.Builder;
+
+@Builder
+
 public class EmailDTO {
     private String from;    // có thể là email gửi (tùy chọn)
     private String to;      // email nhận

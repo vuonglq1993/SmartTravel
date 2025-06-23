@@ -4,6 +4,8 @@ import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+
 public class ContactMessageDTO {
     private String fullName;
     private String email;
