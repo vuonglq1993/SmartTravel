@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ContactMessageServiceImpl implements com.smarttravel.server.service.ContactMessageService {
+public class ContactMessageServiceImpl implements com.smarttravel.server.service.contactmessage.ContactMessageService {
 
     @Autowired
     private ContactMessageRepository repository;

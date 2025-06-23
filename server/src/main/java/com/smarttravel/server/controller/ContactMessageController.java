@@ -1,7 +1,7 @@
 package com.smarttravel.server.controller;
 
 import com.smarttravel.server.model.ContactMessage;
-import com.smarttravel.server.service.ContactMessageService;
+import com.smarttravel.server.service.contactmessage.ContactMessageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

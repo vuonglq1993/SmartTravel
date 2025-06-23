@@ -1,4 +1,4 @@
-package com.smarttravel.server.service;
+package com.smarttravel.server.service.contactmessage;
 
 import com.smarttravel.server.model.ContactMessage;
 
