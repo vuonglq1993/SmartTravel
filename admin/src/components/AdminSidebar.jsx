@@ -11,7 +11,6 @@ const AdminSidebar = () => {
         <li><Link to="/admin/users">User Management</Link></li>
         <li><Link to="/admin/tours">Tour Management</Link></li>
         <li><Link to="/admin/bookings">Booking Management</Link></li>
-        <li><Link to="/admin/state">State Management</Link></li>
         <li><Link to="/admin/reviews">Review Management</Link></li>
         <li><Link to="/admin/notifications">Notifications</Link></li>
       </ul>

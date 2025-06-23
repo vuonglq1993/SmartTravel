@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/destinations")
+@RequestMapping("/api/destinations") // 🔁 Đã bỏ /admin
 @CrossOrigin(origins = "*")
-public class DestinationAdminController {
+public class DestinationController {
 
     @Autowired
     private DestinationService destinationService;

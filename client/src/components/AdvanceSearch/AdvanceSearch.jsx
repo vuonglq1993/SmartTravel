@@ -1,21 +1,16 @@
+// AdvanceSearch.jsx
 import React from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import "../AdvanceSearch/search.css";
 
 const AdvanceSearch = ({ filters, setFilters, onSearch }) => {
   const handleChange = (field, value) => {
-    // Ép kiểu number nếu là min/max price
-    if (field === "minPrice" || field === "maxPrice") {
-      const parsed = value ? parseFloat(value) : undefined;
-      setFilters((prev) => ({ ...prev, [field]: isNaN(parsed) ? undefined : parsed }));
-    } else {
-      setFilters((prev) => ({ ...prev, [field]: value }));
-    }
+    setFilters((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSearch(); // Gọi API tìm kiếm sau khi người dùng ấn nút
+    onSearch();
   };
 
   return (
@@ -25,7 +20,6 @@ const AdvanceSearch = ({ filters, setFilters, onSearch }) => {
           <Col md={12} xs={12}>
             <Form onSubmit={handleSubmit}>
               <div className="box-search shadow-sm p-3 d-flex flex-wrap align-items-center gap-3">
-                
                 <Form.Control
                   type="text"
                   placeholder="Destination Name"
@@ -43,7 +37,7 @@ const AdvanceSearch = ({ filters, setFilters, onSearch }) => {
                 <Form.Control
                   type="number"
                   placeholder="Min Price"
-                  value={filters.minPrice ?? ""}
+                  value={filters.minPrice || ""}
                   onChange={(e) => handleChange("minPrice", e.target.value)}
                   style={{ maxWidth: 150 }}
                   min={0}
@@ -51,21 +45,19 @@ const AdvanceSearch = ({ filters, setFilters, onSearch }) => {
                 <Form.Control
                   type="number"
                   placeholder="Max Price"
-                  value={filters.maxPrice ?? ""}
+                  value={filters.maxPrice || ""}
                   onChange={(e) => handleChange("maxPrice", e.target.value)}
                   style={{ maxWidth: 150 }}
                   min={0}
                 />
                 <Form.Control
-  type="number"
-  placeholder="Duration (days)"
-  value={filters.durationDays || ""}
-  onChange={(e) =>
-    setFilters(prev => ({ ...prev, durationDays: e.target.value }))
-  }
-  style={{ maxWidth: 150 }}
-  min={1}
-/>
+                  type="number"
+                  placeholder="Duration (days)"
+                  value={filters.durationDays || ""}
+                  onChange={(e) => handleChange("durationDays", e.target.value)}
+                  style={{ maxWidth: 150 }}
+                  min={1}
+                />
                 <Button
                   type="submit"
                   variant="primary"

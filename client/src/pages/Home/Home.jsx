@@ -53,8 +53,9 @@ const Home = () => {
   // Pagination logic for Popular Tours
   const indexOfLastTour = currentPage * toursPerPage;
   const indexOfFirstTour = indexOfLastTour - toursPerPage;
-  const currentTours = tours.slice(indexOfFirstTour, indexOfLastTour);
-  const totalPages = Math.ceil(tours.length / toursPerPage);
+  const currentTours = Array.isArray(tours)
+  ? tours.slice(indexOfFirstTour, indexOfLastTour)
+  : [];  const totalPages = Math.ceil(tours.length / toursPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -79,18 +80,19 @@ const Home = () => {
           <Row>
             <Col md="12">
               <Slider {...sliderSettings}>
-                {tours.map((tour, index) => (
-                  <Cards 
-                    key={index}
-                    id={tour.id}
-                    destination={{
-                      name: tour.destination?.name?.trim(),
-                      imageUrl: tour.destination?.imageUrl,
-                      
-                    }}
-                    rating={tour.averageRating}
-                  />
-                ))}
+              {Array.isArray(tours) &&
+  tours.map((tour, index) => (
+    <Cards
+      key={index}
+      id={tour.id}
+      destination={{
+        name: tour.destination?.name?.trim(),
+        imageUrl: tour.destination?.imageUrl,
+      }}
+      rating={tour.averageRating}
+    />
+))}
+
               </Slider>
             </Col>
           </Row>
@@ -108,23 +110,24 @@ const Home = () => {
             </Col>
           </Row>
           <Row>
-            {currentTours.length > 0 ? (
-              currentTours.map((val, idx) => (
-                <Col
-                  md={4}
-                  sm={6}
-                  xs={12}
-                  className="mb-5"
-                  key={val.id || idx}
-                >
-                  <PopularCard val={val} />
-                </Col>
-              ))
-            ) : (
-              <Col>
-                <p>No tours available.</p>
-              </Col>
-            )}
+          {Array.isArray(currentTours) && currentTours.length > 0 ? (
+  currentTours.map((val, idx) => (
+    <Col
+      md={4}
+      sm={6}
+      xs={12}
+      className="mb-5"
+      key={val.id || idx}
+    >
+      <PopularCard val={val} />
+    </Col>
+  ))
+) : (
+  <Col>
+    <p>No tours available.</p>
+  </Col>
+)}
+
           </Row>
 
           {/* Pagination controls */}

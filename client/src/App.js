@@ -14,7 +14,7 @@ import Destinations from './pages/Destinations/Destinations';
 import PhotoGallery from "./pages/PhotoGallery/PhotoGallery";
 import "react-datepicker/dist/react-datepicker.css";
 import AutoSendEmail from './components/AutosendEmail/AutosendEmail';
-// import Success from "./pages/Booking/Success";
+import Success from "./pages/Booking/Success";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -49,7 +49,7 @@ function App() {
         <Route path="/destinations" element={<Destinations />} />
         <Route path="/gallery" element={<PhotoGallery />} />
         <Route path = "/auto-send-email" element = {<AutoSendEmail />} />
-        {/* <Route path="/success" element={<Success />} /> */}
+        <Route path="/success" element={<Success />} />
       </Routes>
       <Footer />
     </>

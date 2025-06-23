@@ -1,12 +1,12 @@
 package com.smarttravel.server.service.image;
 
-import com.smarttravel.server.model.Image;
+import com.smarttravel.server.dto.ImageDTO;
 import java.util.List;
 
 public interface ImageService {
-    List<Image> getAllImages();
-    Image getImageById(int id);
-    Image createImage(Image image);
-    Image updateImage(int id, Image image);
-    boolean deleteImage(int id);
+    List<ImageDTO> getAllImages();
+    ImageDTO getImageById(int id);
+    ImageDTO createImage(ImageDTO dto);
+    ImageDTO updateImage(int id, ImageDTO dto);
+    void deleteImage(int id);
 }

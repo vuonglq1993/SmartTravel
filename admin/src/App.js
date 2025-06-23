@@ -4,9 +4,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import UserManagement from "./pages/UserManagement";
 import TourManagement from "./pages/TourManagement";
 import BookingManagement from "./pages/BookingManagement";
-import StateManagement from "./pages/StateManagement";
 import ReviewManagement from "./pages/ReviewManagement";
-import Notifications from "./pages/Notifications";
 import EmailForm from "./pages/EmailForm";
 import AdminLayout from "./layouts/AdminLayout";
 import { AuthProvider } from "./context/AuthContext";
@@ -53,16 +51,6 @@ function App() {
               
                 <AdminLayout>
                   <BookingManagement />
-                </AdminLayout>
-              
-            }
-          />
-          <Route
-            path="/admin/state"
-            element={
-              
-                <AdminLayout>
-                  <StateManagement />
                 </AdminLayout>
               
             }

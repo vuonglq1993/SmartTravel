@@ -1,5 +1,6 @@
 package com.smarttravel.server.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Formula;
 import java.time.LocalDate;
@@ -29,7 +30,7 @@ public class Tour {
     private Integer capacity;
 
     @OneToMany(mappedBy = "tour")
-    @JsonIgnore
+    @JsonIgnoreProperties("tour") // ✅ thay vì @JsonIgnore
     private List<Booking> bookings;
 
     @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL, orphanRemoval = true)

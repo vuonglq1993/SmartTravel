@@ -13,6 +13,8 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "*")
+
 public class UserController {
 
     @Autowired
@@ -23,6 +25,7 @@ public class UserController {
     public User createUser(@Valid @RequestBody UserDTO registerRequest) {
         return userService.registerUser(registerRequest);
     }
+
 
     // Đăng nhập
     @PostMapping("/login")

@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import "../Booking/booking.css";
 
+// Utility: Get today with time set to 00:00
 const getToday = () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -21,6 +22,7 @@ const Booking = () => {
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
 
+  // Load user from localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -28,6 +30,7 @@ const Booking = () => {
     }
   }, []);
 
+  // Load tour details based on ID
   useEffect(() => {
     if (id) {
       axios
@@ -37,23 +40,32 @@ const Booking = () => {
     }
   }, [id]);
 
+  // Calculate prices
+  const basePrice = tour ? (tour.afterDiscount || tour.price || 0) : 0;
+  const tax = basePrice * quantity * 0.1;
+  const totalPrice = basePrice * quantity + tax;
+
+  // Handle booking and redirect to PayPal approval link
   const handleSubmit = async () => {
     if (!user || !tour) return;
 
-    const bookingData = {
-      bookingDate: new Date().toISOString().slice(0, 19),
-      startDate: startDate.toISOString().split("T")[0],
-      endDate: endDate.toISOString().split("T")[0],
-      quantity: quantity,
-      totalPrice: ((tour.afterDiscount || tour.price || 0) + 100) * quantity,
-      status: "PENDING",
-      user: { id: user.id },
-      tour: { id: tour.id },
+    const formatDate = (date) => {
+      const d = new Date(date);
+      return d.toISOString().slice(0, 19); // yyyy-MM-ddTHH:mm:ss
     };
 
+    const bookingData = {
+      bookingDate: formatDate(new Date()),
+      quantity,
+      totalPrice,
+      status: "Pending",
+      user: { id: user?.id },   // ✅ tránh lỗi undefined
+      tour: { id: tour?.id },   // ✅ tránh lỗi undefined
+    };
+
+
     try {
-      console.log("Sending booking:", bookingData);
-      const bookingRes = await axios.post("http://localhost:8080/api/admin/bookings", bookingData);
+      const bookingRes = await axios.post("http://localhost:8080/api/bookings", bookingData);
       const booking = bookingRes.data;
 
       const paypalRes = await axios.post("http://localhost:8080/api/paypal/pay", null, {
@@ -62,7 +74,10 @@ const Booking = () => {
 
       const approvalLink = paypalRes.data.find((link) => link.rel === "approval_url");
       if (approvalLink) {
-        window.location.href = approvalLink.href;
+        const redirectUrl = new URL(approvalLink.href);
+        redirectUrl.searchParams.append("bookingId", booking.id);
+        redirectUrl.searchParams.append("email", user.email);
+        window.location.href = redirectUrl.toString();
       } else {
         throw new Error("approval_url not found in PayPal response.");
       }
@@ -93,17 +108,17 @@ const Booking = () => {
                   <Row>
                     <Form.Group as={Col} md="12" controlId="username" className="mb-4">
                       <Form.Label>Username</Form.Label>
-                      <Form.Control required type="text" placeholder="Username" value={user?.username || ""} readOnly />
+                      <Form.Control required type="text" value={user?.username || ""} readOnly />
                     </Form.Group>
 
                     <Form.Group className="mb-4" controlId="email" as={Col} md="6">
                       <Form.Label>Email address</Form.Label>
-                      <Form.Control type="email" placeholder="name@example.com" defaultValue={user?.email || ""} readOnly />
+                      <Form.Control type="email" defaultValue={user?.email || ""} readOnly />
                     </Form.Group>
 
                     <Form.Group className="mb-4" controlId="phone" as={Col} md="6">
                       <Form.Label>Phone Number</Form.Label>
-                      <Form.Control type="text" placeholder="Phone Number" defaultValue={user?.phone || ""} readOnly />
+                      <Form.Control type="text" defaultValue={user?.phone || ""} readOnly />
                     </Form.Group>
 
                     <Form.Group className="mb-4" controlId="quantity" as={Col} md="6">
@@ -118,7 +133,7 @@ const Booking = () => {
                     </Form.Group>
 
                     <Form.Group className="mb-4" controlId="checkin" as={Col} md="6">
-                      <Form.Label className="d-block">Check In</Form.Label>
+                      <Form.Label>Check In</Form.Label>
                       <DatePicker
                         selected={startDate}
                         onChange={(date) => {
@@ -131,13 +146,11 @@ const Booking = () => {
                         className="form-control w-100"
                         dateFormat="dd, MMMM, yyyy"
                         minDate={getToday()}
-                        portalId="root-portal"
-                        popperPlacement="bottom-start"
                       />
                     </Form.Group>
 
                     <Form.Group className="mb-4" controlId="checkout" as={Col} md="6">
-                      <Form.Label className="d-block">Check Out</Form.Label>
+                      <Form.Label>Check Out</Form.Label>
                       <DatePicker
                         selected={endDate}
                         onChange={(date) => setEndDate(date)}
@@ -162,28 +175,20 @@ const Booking = () => {
                 <Card.Body className="pb-0">
                   <ListGroup>
                     <ListGroup.Item className="border-0 d-flex justify-content-between h5 pt-0">
-                      <span>Base Price</span>
-                      <strong>${tour?.price?.toFixed(2) || 0}</strong>
+                      <span>Tour Price</span>
+                      <strong>${basePrice.toFixed(2)}</strong>
                     </ListGroup.Item>
-
                     <ListGroup.Item className="border-0 d-flex justify-content-between h5 pt-0">
-                      <span>Taxes & Fees</span>
-                      <strong>$10.00</strong>
+                      <span>Total for {quantity} person(s)</span>
+                      <strong>${(basePrice * quantity).toFixed(2)}</strong>
                     </ListGroup.Item>
-
                     <ListGroup.Item className="border-0 d-flex justify-content-between h5 pt-0">
-                      <span>Quantity</span>
-                      <strong>{quantity}</strong>
+                      <span>Tax (10%)</span>
+                      <strong>${tax.toFixed(2)}</strong>
                     </ListGroup.Item>
-
                     <ListGroup.Item className="border-top d-flex justify-content-between h5 pt-3 fw-bold">
-                      <span>Total Price</span>
-                      <span>
-                        $
-                        {tour
-                          ? (((tour.afterDiscount || tour.price || 0) + 100) * quantity).toFixed(2)
-                          : "0.00"}
-                      </span>
+                      <span>Grand Total</span>
+                      <span>${totalPrice.toFixed(2)}</span>
                     </ListGroup.Item>
                   </ListGroup>
                 </Card.Body>

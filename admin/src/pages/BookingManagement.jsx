@@ -1,11 +1,9 @@
-// BookingManagement.jsx — đã sửa token và giữ nguyên CSS import
-
 import React, { useEffect, useState } from "react";
 import "../styles/BookingManagement.css";
 
-const API_URL = "http://localhost:8080/api/admin/bookings";
-const TOURS_API = "http://localhost:8080/api/admin/tours";
-const USERS_API = "http://localhost:8080/api/admin/users";
+const API_URL = "http://localhost:8080/api/bookings";
+const TOURS_API = "http://localhost:8080/api/tours";
+const USERS_API = "http://localhost:8080/api/users";
 
 const BookingManagement = () => {
   const [bookings, setBookings] = useState([]);
@@ -17,10 +15,8 @@ const BookingManagement = () => {
     userId: "",
     tourId: "",
     date: "",
-    status: "Pending",
+    quantity: 1,
   });
-
-  const getToken = () => localStorage.getItem("token");
 
   useEffect(() => {
     fetchBookings();
@@ -30,147 +26,127 @@ const BookingManagement = () => {
 
   const fetchBookings = async () => {
     try {
-      const token = getToken();
-      const res = await fetch(API_URL, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(API_URL);
       if (!res.ok) throw new Error(`Error fetching bookings: ${res.status}`);
       const data = await res.json();
       setBookings(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error("Lỗi khi fetch bookings:", err);
+      console.error("Error fetching bookings:", err);
       setBookings([]);
     }
   };
 
   const fetchTours = async () => {
     try {
-      const token = getToken();
-      const res = await fetch(TOURS_API, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(TOURS_API);
       if (!res.ok) throw new Error(`Error fetching tours: ${res.status}`);
       const data = await res.json();
       setTours(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error("Lỗi khi fetch tours:", err);
+      console.error("Error fetching tours:", err);
     }
   };
 
   const fetchUsers = async () => {
     try {
-      const token = getToken();
-      const res = await fetch(USERS_API, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(USERS_API);
       if (!res.ok) throw new Error(`Error fetching users: ${res.status}`);
       const data = await res.json();
       setUsers(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error("Lỗi khi fetch users:", err);
+      console.error("Error fetching users:", err);
     }
   };
 
   const handleStatusChange = async (id, newStatus) => {
-    const booking = bookings.find((b) => b.id === id);
-    if (!booking) return;
-
-    const updatedBooking = { ...booking, status: newStatus };
-
     try {
-      const token = getToken();
       const res = await fetch(`${API_URL}/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(updatedBooking),
+        body: JSON.stringify({ status: newStatus }),
       });
-      if (res.ok) fetchBookings();
-      else console.error("Update booking failed with status:", res.status);
+      if (res.ok) {
+        fetchBookings();
+      } else {
+        console.error("Failed to update status:", res.status);
+      }
     } catch (err) {
-      console.error("Lỗi khi cập nhật booking:", err);
+      console.error("Error updating booking:", err);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Xoá đơn đặt tour này?")) return;
-
+    if (!window.confirm("Delete this booking?")) return;
     try {
-      const token = getToken();
       const res = await fetch(`${API_URL}/${id}`, {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       });
-      if (res.ok) fetchBookings();
-      else console.error("Delete booking failed with status:", res.status);
+      if (res.ok) {
+        fetchBookings();
+      } else {
+        console.error("Failed to delete booking:", res.status);
+      }
     } catch (err) {
-      console.error("Lỗi khi xoá booking:", err);
+      console.error("Error deleting booking:", err);
     }
   };
 
   const handleCreateBooking = async () => {
-    const { userId, tourId, date } = newBooking;
-    if (!userId || !tourId || !date) {
-      alert("Vui lòng nhập đầy đủ thông tin.");
-      return;
-    }
-    const tour = tours.find((t) => t.id === parseInt(tourId));
-    if (!tour) {
-      alert("Tour không hợp lệ.");
+    const { userId, tourId, date, quantity } = newBooking;
+    if (!userId || !tourId || !date || quantity <= 0) {
+      alert("Please fill in all fields and ensure quantity > 0.");
       return;
     }
 
+    const selectedTour = tours.find((t) => t.id === parseInt(tourId));
+    if (!selectedTour) {
+      alert("Invalid tour selected.");
+      return;
+    }
+
+    const totalPrice = selectedTour.price * quantity;
+
     try {
-      const token = getToken();
       const res = await fetch(API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           user: { id: parseInt(userId) },
-          tour: tour,
+          tour: { id: parseInt(tourId) },
           bookingDate: date,
+          quantity: quantity,
+          totalPrice: totalPrice,
           status: "Pending",
         }),
       });
       if (res.ok) {
         fetchBookings();
         setShowForm(false);
-        setNewBooking({ userId: "", tourId: "", date: "", status: "Pending" });
+        setNewBooking({ userId: "", tourId: "", date: "", quantity: 1 });
       } else {
-        console.error("Tạo booking thất bại với status:", res.status);
+        console.error("Failed to create booking:", res.status);
       }
     } catch (err) {
-      console.error("Lỗi tạo booking:", err);
+      console.error("Error creating booking:", err);
     }
   };
 
   const filteredBookings =
-    Array.isArray(bookings) && filterStatus !== "All"
-      ? bookings.filter((b) => b.status === filterStatus)
-      : bookings;
+    filterStatus === "All"
+      ? bookings
+      : bookings.filter((b) => b.status === filterStatus);
 
   return (
     <div className="booking-container">
       <h2>Booking Management</h2>
 
+      {/* Filter by booking status */}
       <div className="filter-section">
-        <label htmlFor="status-filter">Lọc theo trạng thái: </label>
+        <label htmlFor="status-filter">Filter by status: </label>
         <select
           id="status-filter"
           value={filterStatus}
@@ -183,8 +159,9 @@ const BookingManagement = () => {
         </select>
       </div>
 
+      {/* Add new booking */}
       <button className="add-btn" onClick={() => setShowForm(true)}>
-        + Tạo Booking
+        + Create Booking
       </button>
 
       {showForm && (
@@ -195,26 +172,28 @@ const BookingManagement = () => {
               setNewBooking({ ...newBooking, userId: e.target.value })
             }
           >
-            <option value="">-- Chọn khách hàng --</option>
+            <option value="">-- Select Customer --</option>
             {users.map((u) => (
               <option key={u.id} value={u.id}>
                 {u.username}
               </option>
             ))}
           </select>
+
           <select
             value={newBooking.tourId}
             onChange={(e) =>
               setNewBooking({ ...newBooking, tourId: e.target.value })
             }
           >
-            <option value="">-- Chọn tour --</option>
-            {tours.map((tour) => (
-              <option key={tour.id} value={tour.id}>
-                {tour.title}
+            <option value="">-- Select Tour --</option>
+            {tours.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.title}
               </option>
             ))}
           </select>
+
           <input
             type="date"
             value={newBooking.date}
@@ -222,17 +201,29 @@ const BookingManagement = () => {
               setNewBooking({ ...newBooking, date: e.target.value })
             }
           />
+
+          <input
+            type="number"
+            min="1"
+            placeholder="Quantity"
+            value={newBooking.quantity}
+            onChange={(e) =>
+              setNewBooking({ ...newBooking, quantity: parseInt(e.target.value) })
+            }
+          />
+
           <div>
             <button className="add-btn" onClick={handleCreateBooking}>
-              Tạo
+              Create
             </button>
             <button className="cancel-btn" onClick={() => setShowForm(false)}>
-              Huỷ
+              Cancel
             </button>
           </div>
         </div>
       )}
 
+      {/* Booking table */}
       <table className="booking-table">
         <thead>
           <tr>
@@ -240,38 +231,41 @@ const BookingManagement = () => {
             <th>Customer</th>
             <th>Tour</th>
             <th>Date</th>
+            <th>Quantity</th>
+            <th>Total ($)</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {Array.isArray(filteredBookings) &&
-            filteredBookings.map((b) => (
-              <tr key={b.id}>
-                <td>{b.id}</td>
-                <td>{b.user?.username || "Không rõ"}</td>
-                <td>{b.tour?.title || "Không rõ"}</td>
-                <td>{b.bookingDate?.slice(0, 10) || "Không rõ"}</td>
-                <td>
-                  <select
-                    value={b.status}
-                    onChange={(e) => handleStatusChange(b.id, e.target.value)}
-                  >
-                    <option value="Pending">Pending</option>
-                    <option value="Confirmed">Confirmed</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
-                </td>
-                <td>
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDelete(b.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+          {filteredBookings.map((b) => (
+            <tr key={b.id}>
+              <td>{b.id}</td>
+              <td>{b.username || "Unknown"}</td>
+              <td>{b.tourTitle || "Unknown"}</td>
+              <td>{b.bookingDate?.slice(0, 10)}</td>
+              <td>{b.quantity}</td>
+              <td>{b.totalPrice}</td>
+              <td>
+                <select
+                  value={b.status}
+                  onChange={(e) => handleStatusChange(b.id, e.target.value)}
+                >
+                  <option value="Pending">Pending</option>
+                  <option value="Confirmed">Confirmed</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select>
+              </td>
+              <td>
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDelete(b.id)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

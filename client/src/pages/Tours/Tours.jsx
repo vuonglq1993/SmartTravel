@@ -10,8 +10,11 @@ import axios from "axios";
 const Tours = () => {
   const [tours, setTours] = useState([]);
   const [filters, setFilters] = useState({
-    destinationName: "", country: "", minPrice: undefined,
-    maxPrice: undefined, durationDays: undefined
+    destinationName: "",
+    country: "",
+    minPrice: "",
+    maxPrice: "",
+    durationDays: ""
   });
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 6;
@@ -19,13 +22,15 @@ const Tours = () => {
   const fetchFilteredTours = async () => {
     try {
       const params = {};
-      if (filters.destinationName) params.destinationName = filters.destinationName;
-      if (filters.country) params.country = filters.country;
-      if (filters.minPrice !== undefined) params.minPrice = filters.minPrice;
-      if (filters.maxPrice !== undefined) params.maxPrice = filters.maxPrice;
-      if (filters.durationDays !== undefined) params.durationDays = filters.durationDays;
-      params.page = 0; params.size = 100;
-      params.sortBy = "price"; params.sortDir = "asc";
+      if (filters.destinationName.trim()) params.destinationName = filters.destinationName.trim();
+      if (filters.country.trim()) params.country = filters.country.trim();
+      if (filters.minPrice !== "" && !isNaN(filters.minPrice)) params.minPrice = parseFloat(filters.minPrice);
+      if (filters.maxPrice !== "" && !isNaN(filters.maxPrice)) params.maxPrice = parseFloat(filters.maxPrice);
+      if (filters.durationDays !== "" && !isNaN(filters.durationDays)) params.durationDays = parseInt(filters.durationDays);
+      params.page = 0;
+      params.size = 100;
+      params.sortBy = "price";
+      params.sortDir = "asc";
 
       const res = await axios.get("http://localhost:8080/api/tours/search", { params });
       setTours(res.data);
@@ -39,13 +44,17 @@ const Tours = () => {
     try {
       const res = await axios.get("http://localhost:8080/api/tours");
       setTours(res.data);
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  useEffect(() => { fetchAll(); }, []);
+  useEffect(() => {
+    fetchAll();
+  }, []);
 
   const handleSearch = () => fetchFilteredTours();
-  const currentItems = tours.slice(currentPage * itemsPerPage, (currentPage+1)*itemsPerPage);
+  const currentItems = tours.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
   const handlePageClick = ({ selected }) => setCurrentPage(selected);
 
   return (
@@ -55,7 +64,7 @@ const Tours = () => {
       <Container className="pt-4">
         <Row>
           {currentItems.length
-            ? currentItems.map(t => (
+            ? currentItems.map((t) => (
                 <Col key={t.id} xl={4} lg={6} md={6} sm={6} className="mb-4">
                   <PopularCard val={t} />
                 </Col>

@@ -1,43 +1,44 @@
 package com.smarttravel.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bookings")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int id; // Primary key
 
-    @Column(name = "booking_date")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime bookingDate;
+    @Column(name = "booking_date", nullable = false)
+    private LocalDateTime bookingDate; // Date and time of booking
 
-    private int quantity;
+    @Column(nullable = false)
+    private int quantity; // Number of people booked
 
-    private String status;
+    @Column(name = "total_price", nullable = false)
+    private double totalPrice; // Total price of the booking
 
-    @Column(name = "total_price")
-    private int totalPrice;
+    @Column(nullable = false)
+    private String status; // Booking status (e.g., pending, confirmed)
 
-    // Khóa ngoại user_id
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties({"bookings", "reviews"}) // 👈 Cắt vòng lặp
+    // Relationship with User entity (Many bookings to one user)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties({"bookings"}) // Prevent recursive serialization
     private User user;
 
-    // Khóa ngoại tour_id
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "tour_id")
-    @JsonIgnoreProperties("bookings")
+    // Relationship with Tour entity (Many bookings to one tour)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tour_id", nullable = false)
+    @JsonIgnoreProperties({"bookings", "reviews", "images"}) // Prevent recursion
     private Tour tour;
 
-    // ===== GETTERS & SETTERS =====
+    // Getters and Setters
 
     public int getId() {
         return id;
@@ -63,20 +64,20 @@ public class Booking {
         this.quantity = quantity;
     }
 
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public int getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(int totalPrice) {
-        this.totalPrice = totalPrice;
     }
 
     public User getUser() {

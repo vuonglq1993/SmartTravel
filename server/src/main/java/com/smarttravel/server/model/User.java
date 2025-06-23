@@ -1,6 +1,7 @@
 package com.smarttravel.server.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -34,11 +35,11 @@ public class User {
     private LocalDate birthDate;
 
     @OneToMany(mappedBy = "user")
-    @JsonIgnoreProperties("user") // 👈 Tránh vòng lặp
+    @JsonIgnore
     private List<Booking> bookings;
 
     @OneToMany(mappedBy = "user")
-    @JsonIgnoreProperties("user")
+    @JsonIgnore
     private List<Review> reviews;
 
     @PrePersist

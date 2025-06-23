@@ -3,14 +3,16 @@ import "../styles/Notifications.css";
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
+  const [contacts, setContacts] = useState([]);
   const [newNotif, setNewNotif] = useState({
     message: "",
     email: "",
     subject: "",
   });
 
-  // 1. Load notifications từ backend
+  // Load notifications + contact messages
   useEffect(() => {
+    // Load notifications
     fetch("http://localhost:8080/api/notifications")
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch notifications");
@@ -18,14 +20,23 @@ const Notifications = () => {
       })
       .then((data) => setNotifications(data))
       .catch((err) => console.error("Fetch notifications error:", err));
+
+    // Load contact messages
+    fetch("http://localhost:8080/api/contact")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch contact messages");
+        return res.json();
+      })
+      .then((data) => setContacts(data))
+      .catch((err) => console.error("Fetch contact error:", err));
   }, []);
 
-  // 2. Xử lý input thay đổi
+  // Xử lý input
   const handleChange = (e) => {
     setNewNotif({ ...newNotif, [e.target.name]: e.target.value });
   };
 
-  // 3. Gửi notification mới (lưu backend)
+  // Gửi notification
   const handleSendNotification = () => {
     if (!newNotif.message.trim()) {
       alert("Vui lòng nhập nội dung thông báo.");
@@ -34,7 +45,7 @@ const Notifications = () => {
 
     const payload = {
       message: newNotif.message,
-      target: "All Users", // Hoặc giá trị cố định nếu bạn muốn
+      target: "All Users",
       date: new Date().toISOString().split("T")[0],
     };
 
@@ -49,23 +60,15 @@ const Notifications = () => {
       })
       .then((savedNotif) => {
         setNotifications((prev) => [savedNotif, ...prev]);
-        setNewNotif({ ...newNotif, message: "" }); // Reset message sau khi gửi
+        setNewNotif({ ...newNotif, message: "" });
       })
       .catch((err) => alert(err.message));
   };
 
-  // 4. Gửi email qua API /api/email/send
+  // Gửi email
   const handleSendEmail = () => {
-    if (!newNotif.email.trim()) {
-      alert("Vui lòng nhập email người nhận.");
-      return;
-    }
-    if (!newNotif.subject.trim()) {
-      alert("Vui lòng nhập tiêu đề email.");
-      return;
-    }
-    if (!newNotif.message.trim()) {
-      alert("Vui lòng nhập nội dung email.");
+    if (!newNotif.email.trim() || !newNotif.subject.trim() || !newNotif.message.trim()) {
+      alert("Vui lòng nhập đầy đủ email, tiêu đề và nội dung.");
       return;
     }
 
@@ -91,13 +94,25 @@ const Notifications = () => {
       .catch((err) => alert(err.message));
   };
 
-  // 5. Xoá notification
-  const handleDelete = (id) => {
+  // Xoá notification
+  const handleDeleteNotification = (id) => {
     if (window.confirm("Bạn có muốn xoá thông báo này không?")) {
       fetch(`http://localhost:8080/api/notifications/${id}`, { method: "DELETE" })
         .then((res) => {
           if (!res.ok) throw new Error("Failed to delete notification");
           setNotifications(notifications.filter((n) => n.id !== id));
+        })
+        .catch((err) => alert(err.message));
+    }
+  };
+
+  // Xoá contact message
+  const handleDeleteContact = (id) => {
+    if (window.confirm("Bạn có muốn xoá tin nhắn này không?")) {
+      fetch(`http://localhost:8080/api/contact/${id}`, { method: "DELETE" })
+        .then((res) => {
+          if (!res.ok) throw new Error("Failed to delete contact message");
+          setContacts(contacts.filter((c) => c.id !== id));
         })
         .catch((err) => alert(err.message));
     }
@@ -142,6 +157,7 @@ const Notifications = () => {
         </div>
       </div>
 
+      {/* Bảng thông báo */}
       <table className="notif-table" style={{ marginTop: 20 }}>
         <thead>
           <tr>
@@ -161,7 +177,42 @@ const Notifications = () => {
               <td>{n.target}</td>
               <td>{n.date}</td>
               <td>
-                <button className="delete-btn" onClick={() => handleDelete(n.id)}>
+                <button className="delete-btn" onClick={() => handleDeleteNotification(n.id)}>
+                  Xoá
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {/* Bảng contact messages */}
+      <h2 style={{ marginTop: 40 }}>Contact Messages</h2>
+
+      <table className="notif-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Message</th>
+            <th>Sent At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {contacts.map((msg) => (
+            <tr key={msg.id}>
+              <td>{msg.id}</td>
+              <td>{msg.fullName}</td>
+              <td>{msg.email}</td>
+              <td>{msg.phone || "-"}</td>
+              <td>{msg.message}</td>
+              <td>{new Date(msg.sentAt).toLocaleString()}</td>
+              <td>
+                <button className="delete-btn" onClick={() => handleDeleteContact(msg.id)}>
                   Xoá
                 </button>
               </td>

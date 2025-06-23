@@ -67,10 +67,9 @@ const TourDetails = () => {
       .get(`http://localhost:8080/api/tours/${id}`)
       .then((res) => setTourDetails(res.data))
       .catch((err) => console.error("Error fetching tour details:", err));
-
     axios
-      .get(`/api/admin/reviews`)
-      .then((res) => setComments(res.data.filter((r) => r.tour.id == id)))
+      .get(`http://localhost:8080/api/reviews/tour/${id}`)
+      .then((res) => setComments(res.data))
       .catch((err) => console.error("Error fetching reviews:", err));
 
     const script = document.createElement("script");
@@ -209,11 +208,16 @@ const TourDetails = () => {
                           <h2 className="h5 mb-3">Other Reviews</h2>
                           {comments.map((review, index) => (
                             <div key={index} className="border rounded p-3 mb-2">
-                              <strong>Rating:</strong> {renderStars(review.rating)}
+                              <div className="d-flex justify-content-between">
+                                <strong>{review.username}</strong>
+                                <small className="text-muted">{new Date(review.createdAt).toLocaleDateString()}</small>
+                              </div>
+                              <div className="mb-1">{renderStars(review.rating)}</div>
                               <p className="mb-0">{review.comment}</p>
                             </div>
                           ))}
                         </div>
+
                       </Row>
                     </Tab.Pane>
                   </Tab.Content>

@@ -5,7 +5,6 @@ import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 import jakarta.persistence.criteria.Join;
 
-
 import java.time.LocalDate;
 
 public class TourSpecification {
@@ -23,7 +22,15 @@ public class TourSpecification {
     }
 
     public static Specification<Tour> hasPriceBetween(Double min, Double max) {
-        return (root, query, cb) -> cb.between(root.get("price"), min, max);
+        if (min != null && max != null) {
+            return (root, query, cb) -> cb.between(root.get("price"), min, max);
+        } else if (min != null) {
+            return (root, query, cb) -> cb.greaterThanOrEqualTo(root.get("price"), min);
+        } else if (max != null) {
+            return (root, query, cb) -> cb.lessThanOrEqualTo(root.get("price"), max);
+        } else {
+            return null;
+        }
     }
 
     public static Specification<Tour> hasDestinationName(String name) {
@@ -38,4 +45,3 @@ public class TourSpecification {
         };
     }
 }
-

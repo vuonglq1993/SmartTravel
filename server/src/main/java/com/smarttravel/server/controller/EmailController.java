@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/email")
-@CrossOrigin(origins = "http://localhost:3001")  // Cho phép React frontend gọi API
+@CrossOrigin(origins = "*")
 
 public class EmailController {
 

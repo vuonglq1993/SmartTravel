@@ -25,7 +25,7 @@ public class ContactMessage {
     @Column(name = "sent_at")
     private LocalDateTime sentAt = LocalDateTime.now();
 
-    // Getter & Setter
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
