@@ -1,59 +1,57 @@
-# SmartTravel
+# 🚀 SmartTravel - Nền tảng Du lịch Thông minh
 
-## Tổng quan:
+![Java](https://img.shields.io/badge/Java-21-orange) 
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2-green) 
+![React](https://img.shields.io/badge/React-18-blue) 
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1)
 
-### Chủ đề: 
-SmartTravel
-SmartTravel là nền tảng du lịch thông minh, cung cấp các công cụ để người dùng lên kế hoạch, tìm kiếm và đặt tour, giúp tối ưu hóa hành trình du lịch với những gợi ý cá nhân hóa và dịch vụ tiện lợi.
+**SmartTravel** là nền tảng du lịch thông minh giúp người dùng **lên kế hoạch, tìm kiếm và đặt tour** một cách dễ dàng. Hệ thống cung cấp gợi ý cá nhân hóa, quản lý lịch trình và thanh toán trực tuyến.
 
-### Các công nghệ sử dụng:
+**Link repo:** [github.com/vuonglq1993/SmartTravel](https://github.com/vuonglq1993/SmartTravel)
 
-- Frontend: Sử dụng React để làm việc, kết hợp với thư viện Bootstrap để trang trí
+## ✨ Tính năng chính
+- Tìm kiếm tour theo địa điểm, giá, thời gian
+- Gợi ý tour cá nhân hóa dựa trên sở thích
+- Đặt tour & thanh toán trực tuyến
+- Quản lý kế hoạch du lịch (lịch trình cá nhân)
+- Quản trị viên (Admin panel) quản lý tour, user, đơn hàng
+- Đăng ký/đăng nhập, bảo mật JWT
 
-- Backend: Sử dụng Java (Springboot), kết hợp mySQL
+## 🛠️ Công nghệ sử dụng (Tech Stack)
 
+**Backend**  
+- Java 21 + Spring Boot 3  
+- Spring Data JPA + Hibernate  
+- MySQL  
+- RESTful API + JWT Authentication  
 
-## 🚀 Yêu cầu trước khi chạy
+**Frontend**  
+- React 18 + TypeScript (nếu có)  
+- Bootstrap 5 + React Bootstrap  
+- React Router, Axios, React Icons  
 
-- **Java JDK** (21): https://adoptium.net/
+**Tools**  
+- Maven | Git | IntelliJ IDEA | VS Code | Postman  
 
----
+## 📸 Screenshot
+*(Bạn upload ảnh vào thư mục `images/` rồi thay link bên dưới)*
 
-## 🖥️ Chạy frontend (React - chạy bằng VSCode)
+![Trang chủ](images/home.png)
+![Tìm kiếm tour](images/search.png)
+![Trang đặt tour](images/booking.png)
+![Admin dashboard](images/admin.png)
 
-### Client (giao diện chính)
+## 🚀 Hướng dẫn cài đặt & chạy
 
+### 1. Yêu cầu hệ thống
+- Java JDK 21 [](https://adoptium.net/)
+- Node.js 18+ & npm
+- MySQL 8.0
 
-cd client
-
-### Cài thư viện
-
-npm install  
-
-### Cài đặt các thư viện cần thiết
-
-npm install react-router-dom react-datepicker react-bootstrap react-lightbox-gallery react-paginate react-slick slick-carousel react-image-gallery bootstrap --legacy-peer-deps 
-npm install react-icons --legacy-peer-deps 
-
-### Chạy frontend tại http://localhost:3000
-
-npm start
-
----
-
-
-## 🧰 Chạy backend (Spring Boot - Chạy bằng Intelij Idea)
-
-### Trỏ vào thư mục Folder
-
+### 2. Chạy Backend (Spring Boot)
+```bash
 cd server
-
-### Dành cho Linux/macOS
-
-./mvnw spring-boot:run  
-
-### Windows:
-
+# Windows
+./mvnw spring-boot:run
+# Hoặc
 mvnw.cmd spring-boot:run
-
-
