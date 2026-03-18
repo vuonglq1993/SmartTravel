@@ -33,14 +33,6 @@
 **Tools**  
 - Maven | Git | IntelliJ IDEA | VS Code | Postman  
 
-## 📸 Screenshot
-*(Bạn upload ảnh vào thư mục `images/` rồi thay link bên dưới)*
-
-![Trang chủ](images/home.png)
-![Tìm kiếm tour](images/search.png)
-![Trang đặt tour](images/booking.png)
-![Admin dashboard](images/admin.png)
-
 ## 🚀 Hướng dẫn cài đặt & chạy
 
 ### 1. Yêu cầu hệ thống
@@ -55,3 +47,8 @@ cd server
 ./mvnw spring-boot:run
 # Hoặc
 mvnw.cmd spring-boot:run
+
+### 3. Chạy frontend(react)
+cd client
+npm install
+npm start
